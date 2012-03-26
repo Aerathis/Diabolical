@@ -8,6 +8,7 @@
 namespace creators
 {
 
+  // Pretty much everything in this anonymous namespace I stole from another project I was working on, and it's better commented there.
   namespace
   {
     double interpolate(double x, double y, double fract)
@@ -64,25 +65,33 @@ namespace creators
     }
   }
 
+  // Fill up the terrainMap with nice fun slightly hilly terrain
   bool fillTerrain(Map<double>* terrainMap)
   {
+    // Get an xorshift RNG
     ShiftRand terrainGen;
+    // Get the map size so I don't blow up the program but segfaulting
     int mapSize = terrainMap->getMapSize();
+    // Max and min (since the RNG outputs values on a different scale, I wasn't thinking ahead)
     int hMin = 1000000000;
     int hMax = 0;
+    // And off we go through the various locations in the map
     for (int x = 0; x < mapSize; x++)
       {
 	for (int y = 0; y < mapSize; y++)
 	  {
+	    // Get the value for the cell and if it is higher or lower than the min or max, set the min/max to that value
 	    double hVal = perlin(x,y,&terrainGen);
 	    if (hVal > hMax)
 	      hMax = hVal;
 	    if (hVal < hMin)
 	      hMin = hVal;
+	    // Toss it into the map. (Yes I know I just pull it out again later, I'm lazy)
 	    terrainMap->setLocationAtCoord(x,y,hVal);
 	  }
       }
 
+    // Not the most efficient, but it does the job. I can fix the speed problem later. Here I'm just normalizing the values to a sane scale. 
     for (int x = 0; x < mapSize; x++)
       {
 	for (int y = 0; y < mapSize; y++)

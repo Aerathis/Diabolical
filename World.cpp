@@ -4,6 +4,7 @@
 
 World::World()
 {
+  // Normal constructor business. Nulling things out and all that.
   collisionConfiguration = NULL;
   dispatcher = NULL;
   overlappingPairCache = NULL;
@@ -14,6 +15,7 @@ World::World()
 
 void World::initWorld()
 {
+  // Initializing the world parameters, at the moment there's no method to use anything but these defaults. 
   collisionConfiguration = new btDefaultCollisionConfiguration();
   dispatcher = new btCollisionDispatcher(collisionConfiguration);
   overlappingPairCache = new btDbvtBroadphase();
@@ -33,6 +35,7 @@ btDiscreteDynamicsWorld* World::getWorld()
 
 void World::registerPlayer()
 {
+  // Get the player set up in the world. (Even though I don't use the rigid body for anything).
   player->initPlayer();
   std::cout << "Beginning registerPlayer" << std::endl;
   dynamicsWorld->addRigidBody(player->getPlayerRigidBody());
@@ -46,11 +49,13 @@ Player* World::getPlayerPtr()
 
 void World::runFrame()
 {
+  // The update function, this is going to be run when there's no input
   worldWeather.runFrame();
 }
 
 void World::runFrameWithInput(SDL_Event* Event)
 {
+  // The other update function, this is going to be run when there is input. 
   //If the event is a click on a unit or structure then we set it as the selected entity
   if (Event->type == SDL_KEYDOWN)
     {
@@ -61,4 +66,6 @@ void World::runFrameWithInput(SDL_Event* Event)
 	  creators::fillTerrain(&worldMap);
 	}
     }
+
+  runFrame();
 }
