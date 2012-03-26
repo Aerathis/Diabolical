@@ -8,7 +8,7 @@
 
 namespace creators
 {
-  bool fillTerrain(Map<int> outMap);
+  bool fillTerrain(Map<double>* outMap);
 
   bool fillWeather(Weather outWeather);
 }

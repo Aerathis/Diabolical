@@ -18,19 +18,25 @@ class Map
       mapSize = size;
       if (!mapCells = (T*)malloc(sizeof(T)*mapSize*mapSize))
 	{
-	  
+	  std::cout << "Allocated Memory for map in constructor" << std::endl;
 	}
     }
 
   ~Map()
     {
-      std::cout << "Freeing map memory" << std::endl;
+      std::cout << "Freeing map memory and destroying" << std::endl;
       free(mapCells);
     }
 
-  T getLocationAtCoord(int x, int y){}
+  T getLocationAtCoord(int x, int y)
+  {
+    return mapCells[x*mapSize*sizeof(T)+y*sizeof(T)];
+  }
 
-  void setLocationAtCoord(int x, int y, T value) {}
+  void setLocationAtCoord(int x, int y, T value) 
+  {
+    mapCells[x*mapSize*sizeof(T)+y*sizeof(T)] = value;
+  }
 
   int getMapSize()
   {
@@ -38,6 +44,11 @@ class Map
   }
   void setSize(int size)
   {
+    if (mapSize > 0)
+      {
+	std::cout << "Freeing old map" << std::endl;
+	free(mapCells);
+      }
     mapSize = size;
     if(mapCells = (T*)malloc(sizeof(T)*mapSize*mapSize))
       {

@@ -7,8 +7,6 @@
 
 #include "btBulletDynamicsCommon.h"
 
-#include "../../../tools/xorshift.h"
-
 #include "Entity.h"
 #include "Map.h"
 #include "Player.h"
@@ -25,13 +23,11 @@ class World
   btSequentialImpulseConstraintSolver* solver;
   btDiscreteDynamicsWorld* dynamicsWorld;
 
-  ShiftRand randGen;
-
   Player* player;
   Entity* selected;
 
   std::vector<Entity> citizens;
-  Map<int> worldMap;
+  Map<double> worldMap;
   Weather worldWeather;
 
  public:

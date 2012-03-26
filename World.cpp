@@ -1,5 +1,7 @@
 #include "World.h"
 
+#include "Creators.h"
+
 World::World()
 {
   collisionConfiguration = NULL;
@@ -22,8 +24,6 @@ void World::initWorld()
 
   worldMap.setSize(0);
   worldWeather.setWeatherMapSize(0);
-
-  randGen.setSeed(0);
 }
 
 btDiscreteDynamicsWorld* World::getWorld()
@@ -52,4 +52,13 @@ void World::runFrame()
 void World::runFrameWithInput(SDL_Event* Event)
 {
   //If the event is a click on a unit or structure then we set it as the selected entity
+  if (Event->type == SDL_KEYDOWN)
+    {
+      if(Event->key.keysym.sym==SDLK_c)
+	{
+	  worldMap.setSize(10);
+	  worldWeather.setWeatherMapSize(10);
+	  creators::fillTerrain(&worldMap);
+	}
+    }
 }
