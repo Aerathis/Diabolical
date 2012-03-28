@@ -30,6 +30,8 @@ class World
   Map<double> worldMap;
   Weather worldWeather;
 
+  bool worldCreated;
+
  public:
   World();
   void initWorld();

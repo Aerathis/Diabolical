@@ -97,8 +97,8 @@ namespace creators
 	for (int y = 0; y < mapSize; y++)
 	  {
 	    double swap = terrainMap->getLocationAtCoord(x,y);
-	    swap = (swap-hMin)/(hMax-hMin);
-	    terrainMap->setLocationAtCoord(x,y,swap);
+	    swap = (swap-hMin)/(hMax-hMin);	    
+	    terrainMap->setLocationAtCoord(x,y,swap < 0.01 ? 0 : swap);
 	    std::cout << terrainMap->getLocationAtCoord(x,y) << " ";
 	  }
 	std::cout << std::endl;

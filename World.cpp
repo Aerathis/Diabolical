@@ -11,6 +11,7 @@ World::World()
   solver = NULL;
   dynamicsWorld = NULL;
   player = new Player();
+  worldCreated = false;
 }
 
 void World::initWorld()
@@ -56,14 +57,37 @@ void World::runFrame()
 void World::runFrameWithInput(SDL_Event* Event)
 {
   // The other update function, this is going to be run when there is input. 
-  //If the event is a click on a unit or structure then we set it as the selected entity
+  // If the event is a click on a unit or structure then we set it as the selected entity
   if (Event->type == SDL_KEYDOWN)
     {
       if(Event->key.keysym.sym==SDLK_c)
 	{
-	  worldMap.setSize(10);
-	  worldWeather.setWeatherMapSize(10);
-	  creators::fillTerrain(&worldMap);
+	  if (!worldCreated)
+	    {
+	      worldMap.setSize(10);
+	      //worldWeather.setWeatherMapSize(10);
+	      creators::fillTerrain(&worldMap);
+	      worldCreated = true;
+	    }
+	  else if(worldCreated)
+	    {
+	      Entity newEnt;
+	      newEnt.initEntity(0,0,0,"test");
+	      std::cout << "New Entity created" << std::endl;
+	      citizens.push_back(newEnt);
+	      std::cout << "Entity added to citizens" << std::endl;
+	    }
+	}
+      else if (Event->key.keysym.sym == SDLK_p)
+	{
+	  std::cout << citizens.size() << std::endl;
+	  std::vector<Entity>::iterator it;
+	  for (it = citizens.begin(); it != citizens.end(); ++it)
+	    {
+	      Entity temp = (Entity)*it;
+	      std::cout << "Position: (";
+	      std::cout << temp.getVitals().x << "," << temp.getVitals().y << ")" << std::endl;
+	    }
 	}
     }
 
