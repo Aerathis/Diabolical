@@ -27,6 +27,8 @@ void World::initWorld()
 
   worldMap.setSize(0);
   worldWeather.setWeatherMapSize(0);
+
+  selected = NULL;
 }
 
 btDiscreteDynamicsWorld* World::getWorld()
@@ -52,6 +54,11 @@ void World::runFrame()
 {
   // The update function, this is going to be run when there's no input
   worldWeather.runFrame();
+  std::vector<Entity>::iterator it;
+  for (it = citizens.begin(); it != citizens.end(); ++it)
+    {
+      it->runFrame();
+    }
 }
 
 void World::runFrameWithInput(SDL_Event* Event)
@@ -80,16 +87,36 @@ void World::runFrameWithInput(SDL_Event* Event)
 	}
       else if (Event->key.keysym.sym == SDLK_p)
 	{
-	  std::cout << citizens.size() << std::endl;
-	  std::vector<Entity>::iterator it;
-	  for (it = citizens.begin(); it != citizens.end(); ++it)
+	  if (selected)
 	    {
-	      Entity temp = (Entity)*it;
+	      std::cout << "Selected report" << std::endl;
 	      std::cout << "Position: (";
-	      std::cout << temp.getVitals().x << "," << temp.getVitals().y << ")" << std::endl;
+	      std::cout << selected->getVitals().x << "," << selected->getVitals().y << ")";
+	      std::cout << " Time Alive: " << selected->getVitals().timeAlive;
+	      std::cout << " Hungry: " << selected->getStats().hunger << std::endl;
 	    }
 	}
+      else if (Event->key.keysym.sym == SDLK_s)
+	{
+	  std::cout << "Clearing Selection" << std::endl;
+	  selected = NULL;
+	}
+      else if (Event->key.keysym.sym == SDLK_1)
+	{
+	  if (citizens.size() >= 1 && selected != &citizens[0])
+	    {
+	      selected = &citizens[0];
+	      std::cout << "First entity selected" << std::endl;
+	    }
+	}
+      else if (Event->key.keysym.sym == SDLK_2)
+	{
+	  if (citizens.size() >= 2 && selected != &citizens[1])
+	    {
+	      selected = &citizens[1];
+	      std::cout << "Second entity selected" << std::endl;
+	    }
+	}      
     }
-
   runFrame();
 }

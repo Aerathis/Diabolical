@@ -10,7 +10,7 @@ namespace creators
 {
   bool fillTerrain(Map<double>* outMap);
 
-  bool fillWeather(Weather outWeather);
+  bool fillWeather(Weather* outWeather);
 }
 
 #endif //CREATORS_H

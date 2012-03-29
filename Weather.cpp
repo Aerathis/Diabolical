@@ -9,6 +9,11 @@ void Weather::setWeatherMapSize(int size)
   weatherMap.setSize(size);
 }
 
+Map<int>* Weather::getWeatherMap()
+{
+  return &weatherMap;
+}
+
 bool Weather::runFrame()
 {
 }

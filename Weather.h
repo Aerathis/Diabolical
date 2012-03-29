@@ -10,6 +10,8 @@ class Weather
 
   void setWeatherMapSize(int size);
   bool runFrame();
+
+  Map<int>* getWeatherMap();
   
  private:
   Map<int> weatherMap;

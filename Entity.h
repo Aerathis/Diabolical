@@ -26,16 +26,23 @@ class Entity
     float x;
     float y;
     int id;
+    int timeAlive;
+    int coreTemp;
     std::string name;
   };
 
   Entity();
 
   void initEntity(int x, int y, int id, std::string name);
+
+  void runFrame();
   
   s_vitals getVitals();
   s_stats getStats();
   s_skills getSkills();
+
+
+  void testLocChange(int newX);
 
  private:
   s_vitals vitals;

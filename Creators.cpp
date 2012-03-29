@@ -105,4 +105,9 @@ namespace creators
       }
     return true;
   }
+
+  bool fillWeather(Weather* outWeather)
+  {
+    
+  }
 }
