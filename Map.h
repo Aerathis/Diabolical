@@ -53,11 +53,16 @@ class Map
     if(mapCells = (T*)malloc(sizeof(T)*mapSize*mapSize))
       {
 	std::cout << "Allocated Memory for map" << std::endl;
+	std::cout << "Allocated Size: " << (sizeof(T)*mapSize*mapSize) << std::endl;
       }
     else
       {
 	std::cout << "Failed to allocate memory for map" << std::endl;
       }
+  }
+  void reportMap()
+  {
+    
   }
 
  private:

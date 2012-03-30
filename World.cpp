@@ -12,6 +12,9 @@ World::World()
   dynamicsWorld = NULL;
   player = new Player();
   worldCreated = false;
+
+  worldMap = new Map<double>;
+  worldWeather = new Map<int>;
 }
 
 void World::initWorld()
@@ -25,8 +28,8 @@ void World::initWorld()
 					      collisionConfiguration);
   dynamicsWorld->setGravity(btVector3(0,-10,0));
 
-  worldMap.setSize(0);
-  worldWeather.setWeatherMapSize(0);
+  worldMap->setSize(0);
+  worldWeather->setSize(0);
 
   selected = NULL;
 }
@@ -53,7 +56,7 @@ Player* World::getPlayerPtr()
 void World::runFrame()
 {
   // The update function, this is going to be run when there's no input
-  worldWeather.runFrame();
+  //worldWeather.runFrame();
   std::vector<Entity>::iterator it;
   for (it = citizens.begin(); it != citizens.end(); ++it)
     {
@@ -71,9 +74,10 @@ void World::runFrameWithInput(SDL_Event* Event)
 	{
 	  if (!worldCreated)
 	    {
-	      worldMap.setSize(10);
-	      //worldWeather.setWeatherMapSize(10);
-	      creators::fillTerrain(&worldMap);
+	      worldMap->setSize(10);
+	      worldWeather->setSize(10);
+	      creators::fillTerrain(worldMap);
+	      creators::fillWeather(worldWeather);
 	      worldCreated = true;
 	    }
 	  else if(worldCreated)
@@ -116,7 +120,15 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      selected = &citizens[1];
 	      std::cout << "Second entity selected" << std::endl;
 	    }
-	}      
+	}
+      else if (Event->key.keysym.sym == SDLK_w)
+	{
+	}
+      else if (Event->key.keysym.sym == SDLK_t)
+	{
+	  std::cout << worldMap->getLocationAtCoord(5,0) << std::endl;
+	  std::cout << worldWeather->getLocationAtCoord(5,0) << std::endl;
+	}
     }
-  runFrame();
+  runFrame();ss
 }

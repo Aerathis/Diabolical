@@ -98,7 +98,7 @@ namespace creators
 	  {
 	    double swap = terrainMap->getLocationAtCoord(x,y);
 	    swap = (swap-hMin)/(hMax-hMin);	    
-	    terrainMap->setLocationAtCoord(x,y,swap < 0.01 ? 0 : swap);
+	    terrainMap->setLocationAtCoord(x,y,swap > 0.01 ? swap : 0);
 	    std::cout << terrainMap->getLocationAtCoord(x,y) << " ";
 	  }
 	std::cout << std::endl;
@@ -106,8 +106,17 @@ namespace creators
     return true;
   }
 
-  bool fillWeather(Weather* outWeather)
+  bool fillWeather(Map<int>* weatherMap)
   {
-    
+    int mapSize = weatherMap->getMapSize();
+    for (int x = 0; x < mapSize; x++)
+      {
+	for (int y = 0; y < mapSize; y++)
+	  {
+	    weatherMap->setLocationAtCoord(x,y,37);
+	    std::cout << weatherMap->getLocationAtCoord(x,y) << " ";
+	  }
+	std::cout << std::endl;
+      }
   }
 }
