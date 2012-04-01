@@ -12,9 +12,6 @@ World::World()
   dynamicsWorld = NULL;
   player = new Player();
   worldCreated = false;
-
-  worldMap = new Map<double>;
-  worldWeather = new Map<int>;
 }
 
 void World::initWorld()
@@ -28,8 +25,8 @@ void World::initWorld()
 					      collisionConfiguration);
   dynamicsWorld->setGravity(btVector3(0,-10,0));
 
-  worldMap->setSize(0);
-  worldWeather->setSize(0);
+  worldMap.setSize(0);
+  worldWeather.setSize(0);
 
   selected = NULL;
 }
@@ -74,10 +71,11 @@ void World::runFrameWithInput(SDL_Event* Event)
 	{
 	  if (!worldCreated)
 	    {
-	      worldMap->setSize(10);
-	      worldWeather->setSize(10);
-	      creators::fillTerrain(worldMap);
-	      creators::fillWeather(worldWeather);
+	      worldMap.setSize(10);
+	      worldWeather.setSize(10);
+	      creators::fillTerrain(&worldMap);
+	      std::cout << std::endl;
+	      creators::fillWeather(&worldWeather);
 	      worldCreated = true;
 	    }
 	  else if(worldCreated)
@@ -126,9 +124,20 @@ void World::runFrameWithInput(SDL_Event* Event)
 	}
       else if (Event->key.keysym.sym == SDLK_t)
 	{
-	  std::cout << worldMap->getLocationAtCoord(5,0) << std::endl;
-	  std::cout << worldWeather->getLocationAtCoord(5,0) << std::endl;
+	  if (selected != &citizens[1])
+	    {
+	      std::cout << "Moving selected entity to entity 1" << std::endl;
+	      selected->moveToTarget(&citizens[1]);
+	    }
+	}
+      else if (Event->key.keysym.sym == SDLK_m)
+	{
+	  if (selected != NULL)
+	    {
+	      std::cout << "Selected entity moving to (5,4)" << std::endl;
+	      selected->moveToTargetLocation(5,4);
+	    }
 	}
     }
-  runFrame();ss
+  runFrame();
 }

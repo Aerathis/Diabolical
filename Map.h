@@ -12,14 +12,12 @@ class Map
   Map()
     {
       mapSize = 0;
+      setSize(mapSize);
     }
   Map(int size)
     {
       mapSize = size;
-      if (!mapCells = (T*)malloc(sizeof(T)*mapSize*mapSize))
-	{
-	  std::cout << "Allocated Memory for map in constructor" << std::endl;
-	}
+      setSize(mapSize);
     }
 
   ~Map()
@@ -30,12 +28,12 @@ class Map
 
   T getLocationAtCoord(int x, int y)
   {
-    return mapCells[x*mapSize*sizeof(T)+y*sizeof(T)];
+    return mapCells[x][y];
   }
 
   void setLocationAtCoord(int x, int y, T value) 
   {
-    mapCells[x*mapSize*sizeof(T)+y*sizeof(T)] = value;
+    mapCells[x][y] = value;
   }
 
   int getMapSize()
@@ -50,10 +48,13 @@ class Map
 	free(mapCells);
       }
     mapSize = size;
-    if(mapCells = (T*)malloc(sizeof(T)*mapSize*mapSize))
+    if(mapCells = (T**)malloc(sizeof(T*)*mapSize))
       {
+	for (int i = 0 ; i < mapSize; i++)
+	  {
+	    mapCells[i] = (T*)malloc(sizeof(T)*mapSize);
+	  }
 	std::cout << "Allocated Memory for map" << std::endl;
-	std::cout << "Allocated Size: " << (sizeof(T)*mapSize*mapSize) << std::endl;
       }
     else
       {
@@ -66,7 +67,7 @@ class Map
   }
 
  private:
-  T* mapCells;
+  T** mapCells;
   int mapSize;
 };
 

@@ -27,8 +27,8 @@ class World
   Entity* selected;
 
   std::vector<Entity> citizens;
-  Map<double>* worldMap;
-  Map<int>* worldWeather;
+  Map<double> worldMap;
+  Map<int> worldWeather;
 
   bool worldCreated;
 

@@ -18,13 +18,14 @@ class Entity
     int hunger;
     int thirst;
     int tired;
+    int moveSpeed;
     s_skills skills;
   };
 
   struct s_vitals
   {
-    float x;
-    float y;
+    int x;
+    int y;
     int id;
     int timeAlive;
     int coreTemp;
@@ -36,6 +37,9 @@ class Entity
   void initEntity(int x, int y, int id, std::string name);
 
   void runFrame();
+
+  void moveToTargetLocation(int x, int y);
+  void moveToTarget(Entity* targ);
   
   s_vitals getVitals();
   s_stats getStats();
@@ -47,6 +51,9 @@ class Entity
  private:
   s_vitals vitals;
   s_stats stats;
+
+  float targetX, targetY;
+  Entity* target;
 };
 
 #endif //ENTITY_H
