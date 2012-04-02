@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "Map.h"
+
 class Entity
 {
 
@@ -36,11 +38,11 @@ class Entity
 
   void initEntity(int x, int y, int id, std::string name);
 
-  void runFrame();
+  void runFrame(Map<double>* world, Map<int>* weather);
 
   void moveToTargetLocation(int x, int y);
   void moveToTarget(Entity* targ);
-  
+
   s_vitals getVitals();
   s_stats getStats();
   s_skills getSkills();
@@ -52,6 +54,7 @@ class Entity
   s_vitals vitals;
   s_stats stats;
 
+  bool alive;
   float targetX, targetY;
   Entity* target;
 };

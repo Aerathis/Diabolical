@@ -38,6 +38,7 @@ class World
   
   btDiscreteDynamicsWorld* getWorld();
   Player* getPlayerPtr();
+  const Map<int>* getWeatherMap();
 
   void registerPlayer();
 

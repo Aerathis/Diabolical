@@ -50,6 +50,10 @@ Player* World::getPlayerPtr()
   return player;
 }
 
+const Map<int>* World::getWeatherMap()
+{
+  return &worldWeather;
+}
 void World::runFrame()
 {
   // The update function, this is going to be run when there's no input
@@ -57,7 +61,7 @@ void World::runFrame()
   std::vector<Entity>::iterator it;
   for (it = citizens.begin(); it != citizens.end(); ++it)
     {
-      it->runFrame();
+      it->runFrame(&worldMap, &worldWeather);
     }
 }
 
@@ -121,6 +125,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	}
       else if (Event->key.keysym.sym == SDLK_w)
 	{
+	  worldWeather.setLocationAtCoord(0,0,33);
 	}
       else if (Event->key.keysym.sym == SDLK_t)
 	{

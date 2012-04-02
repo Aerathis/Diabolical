@@ -2,8 +2,11 @@
 
 #include "Entity.h"
 
+class World;
+
 Entity::Entity()
 {
+  initEntity(0,0,0,"hrk");
 }
 
 void Entity::initEntity(int inX, int inY, int inId, std::string inName)
@@ -21,33 +24,107 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   stats.thirst = 0;
   stats.tired = 0;
   stats.moveSpeed = 500;
+
+  alive = true;
 }
 
-void Entity::runFrame()
+void Entity::runFrame(Map<double>* world, Map<int>* weather)
 {
-  vitals.timeAlive += 1;
-  if (vitals.timeAlive % 1500 == 0)
+  // Check to see if the character is alive at all, if not no need to do anything else
+  if (alive)
     {
-      stats.hunger += 1;
-      stats.thirst += 1;
-    }
-  if (vitals.timeAlive % stats.moveSpeed == 0)
-    {
-      if (vitals.x != targetX)
-	vitals.x = (targetX > vitals.x ? vitals.x + 1 : vitals.x - 1);
-      if (vitals.y != targetY)
-	vitals.y = (targetY > vitals.y ? vitals.y + 1 : vitals.y - 1);
-    }
-  if (target != NULL)
-    {
-      if (vitals.x != target->getVitals().x && vitals.y != target->getVitals().y)
+      // Doing the various vital statistics updating first
+      vitals.timeAlive += 1;
+      if (vitals.timeAlive % 1500 == 0)
 	{
-	  moveToTargetLocation(target->getVitals().x, target->getVitals().y);
+	  // The hunger section
+	  stats.hunger += 1;
+	  if (stats.hunger == 50)
+	    {
+	      std::cout << "Getting hungry" << std::endl;
+	    }
+	  else if (stats.hunger == 75)
+	    {
+	      std::cout << "Getting very hungry" << std::endl;
+	    }
+	  else if (stats.hunger == 93)
+	    {
+	      std::cout << "Starving!!" << std::endl;
+	    }
+
+	  // The thirsty section
+	  stats.thirst += 1;
+
+	  // The hot/cold section
+	  if (weather->getLocationAtCoord(vitals.x, vitals.y) != vitals.coreTemp)
+	    {
+	      vitals.coreTemp = 
+		(weather->getLocationAtCoord(vitals.x, vitals.y) > vitals.coreTemp ? 
+		 vitals.coreTemp + 1 : vitals.coreTemp - 1);
+	    }
+	  if (vitals.coreTemp == 35)
+	    {
+	      std::cout << "Is feeling cold" << std::endl;
+	    }
+	  else if (vitals.coreTemp == 32)
+	    {
+	      std::cout << "Is shivering" << std::endl;
+	    }
+	  else if (vitals.coreTemp == 28)
+	    {
+	      std::cout << "Is freezing!!" << std::endl;
+	    }
+	  if (vitals.coreTemp == 39)
+	    {
+	      std::cout << "Is feeling warm" << std::endl;
+	    }
+	  else if (vitals.coreTemp == 42)
+	    {
+	      std::cout << "Is burning up" << std::endl;
+	    }
 	}
-      else
+
+      // The movement section
+      if (vitals.timeAlive % stats.moveSpeed == 0)
 	{
-	  std::cout << "Target Entity Reached" << std::endl;
-	  target = NULL;
+	  if (vitals.x != targetX)
+	    vitals.x = (targetX > vitals.x ? vitals.x + 1 : vitals.x - 1);
+	  if (vitals.y != targetY)
+	    vitals.y = (targetY > vitals.y ? vitals.y + 1 : vitals.y - 1);
+	}
+      if (target != NULL)
+	{
+	  if (vitals.x != target->getVitals().x && vitals.y != target->getVitals().y)
+	    {
+	      moveToTargetLocation(target->getVitals().x, target->getVitals().y);
+	    }
+	  else
+	    {
+	      std::cout << "Target Entity Reached" << std::endl;
+	      target = NULL;
+	    }
+	}
+
+      // Check to see for any adverse effects based on the current situation
+      if (stats.hunger == 100)
+	{
+	  std::cout << "Has starved to death" << std::endl;
+	  alive = false;
+	}
+      if (vitals.coreTemp == 20)
+	{
+	  std::cout << "Has frozen to death" << std::endl;
+	  alive = false;
+	}
+      if (vitals.coreTemp == 46)
+	{
+	  std::cout << "Has died from the heat" << std::endl;
+	  alive = false;
+	}
+      if (vitals.timeAlive == 10000000)
+	{
+	  std::cout << "Has passed away of old age" << std::endl;
+	  alive = false;
 	}
     }
 }
@@ -71,9 +148,4 @@ Entity::s_vitals Entity::getVitals()
 Entity::s_stats Entity::getStats()
 {
   return stats;
-}
-
-void Entity::testLocChange(int newX)
-{
-  vitals.x = newX;
 }
