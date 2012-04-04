@@ -54,6 +54,11 @@ const Map<int>* World::getWeatherMap()
 {
   return &worldWeather;
 }
+
+const std::vector<Object>* World::getObjectList()
+{
+  return &objects;
+} 
 void World::runFrame()
 {
   // The update function, this is going to be run when there's no input
@@ -101,6 +106,14 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      std::cout << " Time Alive: " << selected->getVitals().timeAlive;
 	      std::cout << " Hungry: " << selected->getStats().hunger << std::endl;
 	    }
+	  else
+	    {
+	      std::vector<Object>::iterator it;
+	      for (it = objects.begin(); it != objects.end(); ++it)
+		{
+		  std::cout << it->pollObject() << std::endl;
+		}
+	    }
 	}
       else if (Event->key.keysym.sym == SDLK_s)
 	{
@@ -142,6 +155,14 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      std::cout << "Selected entity moving to (5,4)" << std::endl;
 	      selected->moveToTargetLocation(5,4);
 	    }
+	}
+      else if (Event->key.keysym.sym == SDLK_o)
+	{
+	  Object newObj;
+	  newObj.initObject(0,0,Object::e_food);
+	  std::cout << "New food object created" << std::endl;
+	  objects.push_back(newObj);
+	  std::cout << "Object added to world" << std::endl;
 	}
     }
   runFrame();

@@ -47,6 +47,10 @@ void CApp::OnEvent(SDL_Event* Event)
     {
       Running = false;
     }
+  else if (Event->type == SDL_KEYDOWN && Event->key.keysym.sym == SDLK_ESCAPE)
+    {
+      Running = false;
+    }
   else
     {
       gameWorld.runFrameWithInput(Event);

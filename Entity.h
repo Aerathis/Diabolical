@@ -47,9 +47,6 @@ class Entity
   s_stats getStats();
   s_skills getSkills();
 
-
-  void testLocChange(int newX);
-
  private:
   s_vitals vitals;
   s_stats stats;

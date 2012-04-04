@@ -9,6 +9,7 @@
 
 #include "Entity.h"
 #include "Map.h"
+#include "Object.h"
 #include "Player.h"
 #include "Weather.h"
 
@@ -27,6 +28,7 @@ class World
   Entity* selected;
 
   std::vector<Entity> citizens;
+  std::vector<Object> objects;
   Map<double> worldMap;
   Map<int> worldWeather;
 
@@ -39,6 +41,7 @@ class World
   btDiscreteDynamicsWorld* getWorld();
   Player* getPlayerPtr();
   const Map<int>* getWeatherMap();
+  const std::vector<Object>* getObjectList();
 
   void registerPlayer();
 

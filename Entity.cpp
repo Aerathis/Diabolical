@@ -15,6 +15,7 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   vitals.y = inY;
   targetX = inX;
   targetY = inY;
+  target = NULL;
   vitals.id = inId;
   vitals.timeAlive = 0;
   vitals.coreTemp = 37;
