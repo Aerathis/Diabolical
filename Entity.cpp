@@ -34,6 +34,7 @@ void Entity::runFrame(Map<double>* world, Map<int>* weather)
   // Check to see if the character is alive at all, if not no need to do anything else
   if (alive)
     {
+      decision = smarts.runFrame(this);
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
       if (vitals.timeAlive % 1500 == 0)
@@ -55,6 +56,14 @@ void Entity::runFrame(Map<double>* world, Map<int>* weather)
 
 	  // The thirsty section
 	  stats.thirst += 1;
+	  if (stats.thirst == 75)
+	    {
+	      std::cout << "Is extremely thirsty" << std::endl;
+	    }
+	  if (stats.thirst == 93)
+	    {
+	      std::cout << "Is dying of thirst" << std::endl;
+	    }
 
 	  // The hot/cold section
 	  if (weather->getLocationAtCoord(vitals.x, vitals.y) != vitals.coreTemp)
@@ -110,6 +119,11 @@ void Entity::runFrame(Map<double>* world, Map<int>* weather)
       if (stats.hunger == 100)
 	{
 	  std::cout << "Has starved to death" << std::endl;
+	  alive = false;
+	}
+      if (stats.thirst == 100)
+	{
+	  std::cout << "Has died of dehydration" << std::endl;
 	  alive = false;
 	}
       if (vitals.coreTemp == 20)

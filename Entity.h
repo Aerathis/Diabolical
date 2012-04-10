@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "Brain.h"
 #include "Map.h"
 
 class Entity
@@ -54,6 +55,8 @@ class Entity
   bool alive;
   float targetX, targetY;
   Entity* target;
+  Brain smarts;
+  e_brainState decision;
 };
 
 #endif //ENTITY_H

@@ -1,5 +1,5 @@
 OBJ = Player.o Loader.o Model.o World.o Renderer.o Entity.o Weather.o \
-	  ../../../tools/xorshift.o Creators.o Object.o
+	  ../../../tools/xorshift.o Creators.o Object.o Brain.o
 
 linux : CApp
 
@@ -48,3 +48,6 @@ Creators.o : Creators.h Creators.cpp
 
 Object.o : Object.h Object.cpp
 	g++ -c Object.cpp
+
+Brain.o : Brain.cpp Brain.h
+	g++ -c Brain.cpp
