@@ -34,8 +34,8 @@ World.o : World.cpp World.h
 Renderer.o : Renderer.cpp Renderer.h
 	g++ -c -I ../../../ExternalLibs/SDL -I ../../../ExternalLibs/bullet/src Renderer.cpp
 
-Entity.o : Entity.h Entity.cpp
-	g++ -c Entity.cpp
+Entity.o : Entity.h Entity.cpp Brain.o
+	g++ -c -I ../../../ExternalLibs/bullet/src Entity.cpp
 
 Dude.o : Dude.h Dude.cpp
 	g++ -c Dude.cpp

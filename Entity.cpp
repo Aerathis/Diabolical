@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-class World;
+#include "World.h"
 
 Entity::Entity()
 {
@@ -29,12 +29,30 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   alive = true;
 }
 
-void Entity::runFrame(Map<double>* world, Map<int>* weather)
+// A function that sets in the course of action based on the decision made by the brain
+void Entity::processDecision(e_brainState decision)
+{
+  switch (decision)
+    {
+    case e_idle:
+      break;
+    case e_getFood:
+      break;
+    case e_getWater:
+      break;
+    case e_takeNap:
+      break;
+    }
+}
+
+void Entity::runFrame(World* host)
 {
   // Check to see if the character is alive at all, if not no need to do anything else
   if (alive)
     {
-      decision = smarts.runFrame(this);
+      // Runs the decision making and then processes that decision to select a course of action
+      processDecision(smarts.runFrame(this));
+
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
       if (vitals.timeAlive % 1500 == 0)
@@ -66,10 +84,10 @@ void Entity::runFrame(Map<double>* world, Map<int>* weather)
 	    }
 
 	  // The hot/cold section
-	  if (weather->getLocationAtCoord(vitals.x, vitals.y) != vitals.coreTemp)
+	  if (host->im_getWeatherMap()->getLocationAtCoord(vitals.x, vitals.y) != vitals.coreTemp)
 	    {
 	      vitals.coreTemp = 
-		(weather->getLocationAtCoord(vitals.x, vitals.y) > vitals.coreTemp ? 
+		(host->im_getWeatherMap()->getLocationAtCoord(vitals.x, vitals.y) > vitals.coreTemp ? 
 		 vitals.coreTemp + 1 : vitals.coreTemp - 1);
 	    }
 	  if (vitals.coreTemp == 35)

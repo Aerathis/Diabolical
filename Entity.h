@@ -7,6 +7,8 @@
 #include "Brain.h"
 #include "Map.h"
 
+class World;
+
 class Entity
 {
 
@@ -39,7 +41,7 @@ class Entity
 
   void initEntity(int x, int y, int id, std::string name);
 
-  void runFrame(Map<double>* world, Map<int>* weather);
+  void runFrame(World* host);
 
   void moveToTargetLocation(int x, int y);
   void moveToTarget(Entity* targ);
@@ -57,6 +59,8 @@ class Entity
   Entity* target;
   Brain smarts;
   e_brainState decision;
+
+  void processDecision(e_brainState decision);
 };
 
 #endif //ENTITY_H

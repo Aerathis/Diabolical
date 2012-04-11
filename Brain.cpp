@@ -14,6 +14,7 @@ Brain::~Brain()
 e_brainState Brain::runFrame(Entity* caller)
 {
   e_brainState newState = currentState;
+  // Cycle through various extremely basic scenarios and select a decision
   if (caller->getStats().thirst > 50)
     {
       newState = e_getWater;
@@ -31,6 +32,8 @@ e_brainState Brain::runFrame(Entity* caller)
       newState = e_takeNap;
     }
 
+  // If the brain has changed its mind since the last time it made a decision
+  // it announces that change and applies it to the current decision
   if (newState != currentState)
     {
       std::cout << "Brain state changed" << std::endl;

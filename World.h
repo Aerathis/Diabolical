@@ -7,6 +7,7 @@
 
 #include "btBulletDynamicsCommon.h"
 
+#include "Creators.h"
 #include "Entity.h"
 #include "Map.h"
 #include "Object.h"
@@ -30,6 +31,7 @@ class World
   std::vector<Entity> citizens;
   std::vector<Object> objects;
   Map<double> worldMap;
+  Map<creators::e_terrainType> terrainMap;
   Map<int> worldWeather;
 
   bool worldCreated;
@@ -40,8 +42,9 @@ class World
   
   btDiscreteDynamicsWorld* getWorld();
   Player* getPlayerPtr();
-  const Map<int>* getWeatherMap();
-  const std::vector<Object>* getObjectList();
+  Map<int>* im_getWeatherMap();
+  Map<double>* im_getWorldMap();
+  std::vector<Object>* getObjectList();
 
   void registerPlayer();
 

@@ -106,6 +106,8 @@ namespace creators
     return true;
   }
 
+
+  // At the moment this just sets everything to the body temp so that things don't die
   bool fillWeather(Map<int>* weatherMap)
   {
     int mapSize = weatherMap->getMapSize();
@@ -115,6 +117,40 @@ namespace creators
 	  {
 	    weatherMap->setLocationAtCoord(x,y,37);
 	    std::cout << weatherMap->getLocationAtCoord(x,y) << " ";
+	  }
+	std::cout << std::endl;
+      }
+  }
+
+  // Simple fill function - checks for magic height values and fills the typeMap with the 
+  // Corresponding enum value
+  bool fillTerrainDetails(Map<e_terrainType>* terrainMap, Map<double>* worldMap)
+  {
+    int mapSize = terrainMap->getMapSize();
+    for (int x = 0; x < mapSize; x++)
+      {
+	for (int y = 0; y < mapSize; y++)
+	  {
+	    if (worldMap->getLocationAtCoord(x,y) < 0.2)
+	      {
+		terrainMap->setLocationAtCoord(x,y,e_water);
+		std::cout << "w ";
+	      }
+	    else if (worldMap->getLocationAtCoord(x,y) < 0.4 && worldMap->getLocationAtCoord(x,y) > 0.2)
+	      {
+		terrainMap->setLocationAtCoord(x,y,e_shallowWater);
+		std::cout << "s ";
+	      }
+	    else if (worldMap->getLocationAtCoord(x,y) > 0.8)
+	      {
+		terrainMap->setLocationAtCoord(x,y,e_mountain);
+		std::cout << "m ";
+	      }
+	    else 
+	      {
+		terrainMap->setLocationAtCoord(x,y,e_grass);
+		std::cout << "  ";
+	      }
 	  }
 	std::cout << std::endl;
       }

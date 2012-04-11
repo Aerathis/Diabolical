@@ -20,7 +20,7 @@ class Brain
 
  public:
   Brain();
-  virtual ~Brain();
+  ~Brain();
 
   e_brainState runFrame(Entity* caller);
 

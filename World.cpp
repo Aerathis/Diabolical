@@ -1,7 +1,5 @@
 #include "World.h"
 
-#include "Creators.h"
-
 World::World()
 {
   // Normal constructor business. Nulling things out and all that.
@@ -26,6 +24,7 @@ void World::initWorld()
   dynamicsWorld->setGravity(btVector3(0,-10,0));
 
   worldMap.setSize(0);
+  terrainMap.setSize(0);
   worldWeather.setSize(0);
 
   selected = NULL;
@@ -45,20 +44,32 @@ void World::registerPlayer()
   std::cout << "Rigid body added to world" << std::endl;
 }
 
+// Returns the player pointer which I don't really use at all at this point
 Player* World::getPlayerPtr()
 {
   return player;
 }
 
-const Map<int>* World::getWeatherMap()
+// Returns a pointer to the weatherMap, which shouldn't be modified outside of this file
+Map<int>* World::im_getWeatherMap()
 {
+  // This is only to be used as immutable
   return &worldWeather;
 }
 
-const std::vector<Object>* World::getObjectList()
+// Returns a pointer to the list of objects in the world.
+std::vector<Object>* World::getObjectList()
 {
   return &objects;
-} 
+}
+
+// Returns a pointer to the worldMap, which shouldn't be modified outside of this file
+Map<double>* World::im_getWorldMap()
+{
+  // This is only to be used as immutable
+  return &worldMap;
+}
+ 
 void World::runFrame()
 {
   // The update function, this is going to be run when there's no input
@@ -66,7 +77,7 @@ void World::runFrame()
   std::vector<Entity>::iterator it;
   for (it = citizens.begin(); it != citizens.end(); ++it)
     {
-      it->runFrame(&worldMap, &worldWeather);
+      it->runFrame(this);
     }
 }
 
@@ -74,15 +85,22 @@ void World::runFrameWithInput(SDL_Event* Event)
 {
   // The other update function, this is going to be run when there is input. 
   // If the event is a click on a unit or structure then we set it as the selected entity
+
+  // Most of the code in this function is pretty much solely for testing purposes
+  // Actual input will be handled in a much more sane fashion in a separate location
   if (Event->type == SDL_KEYDOWN)
     {
+      // Handle when the "C" key is pressed
       if(Event->key.keysym.sym==SDLK_c)
 	{
 	  if (!worldCreated)
 	    {
 	      worldMap.setSize(10);
+	      terrainMap.setSize(10);
 	      worldWeather.setSize(10);
 	      creators::fillTerrain(&worldMap);
+	      std::cout << std::endl;
+	      creators::fillTerrainDetails(&terrainMap, &worldMap);
 	      std::cout << std::endl;
 	      creators::fillWeather(&worldWeather);
 	      worldCreated = true;
@@ -96,6 +114,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      std::cout << "Entity added to citizens" << std::endl;
 	    }
 	}
+      // Handle when the "P" key is pressed
       else if (Event->key.keysym.sym == SDLK_p)
 	{
 	  if (selected)
@@ -115,11 +134,13 @@ void World::runFrameWithInput(SDL_Event* Event)
 		}
 	    }
 	}
+      // Handle when the "S" key is pressed
       else if (Event->key.keysym.sym == SDLK_s)
 	{
 	  std::cout << "Clearing Selection" << std::endl;
 	  selected = NULL;
 	}
+      // Handle when the "1" key is pressed
       else if (Event->key.keysym.sym == SDLK_1)
 	{
 	  if (citizens.size() >= 1 && selected != &citizens[0])
@@ -128,6 +149,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      std::cout << "First entity selected" << std::endl;
 	    }
 	}
+      // Handle when the "2" key is pressed
       else if (Event->key.keysym.sym == SDLK_2)
 	{
 	  if (citizens.size() >= 2 && selected != &citizens[1])
@@ -136,10 +158,12 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      std::cout << "Second entity selected" << std::endl;
 	    }
 	}
+      // Handle when the "W" key is pressed
       else if (Event->key.keysym.sym == SDLK_w)
 	{
 	  worldWeather.setLocationAtCoord(0,0,33);
 	}
+      // Handle when the "T" key is pressed
       else if (Event->key.keysym.sym == SDLK_t)
 	{
 	  if (selected != &citizens[1])
@@ -148,6 +172,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      selected->moveToTarget(&citizens[1]);
 	    }
 	}
+      // Handle when the "M" key is pressed
       else if (Event->key.keysym.sym == SDLK_m)
 	{
 	  if (selected != NULL)
@@ -165,5 +190,6 @@ void World::runFrameWithInput(SDL_Event* Event)
 	  std::cout << "Object added to world" << std::endl;
 	}
     }
+  // Finally run the standard frame
   runFrame();
 }
