@@ -14,6 +14,20 @@ class Entity
 
  public:
 
+  enum e_frameState
+  {
+    e_eatFood,
+    e_drinkWater,
+    e_nap,
+    e_idleFrame
+  };
+
+  struct s_frameResolution
+  {
+    e_frameState resultState;
+    void* target;
+  };
+
   struct s_skills
   {
   };
@@ -60,7 +74,8 @@ class Entity
   Brain smarts;
   e_brainState decision;
 
-  void processDecision(e_brainState decision);
+  void processDecision(e_brainState decision, World* host, s_frameResolution* result);
+  void resolveFrame(s_frameResolution* frState);
 };
 
 #endif //ENTITY_H

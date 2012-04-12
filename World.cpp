@@ -95,9 +95,9 @@ void World::runFrameWithInput(SDL_Event* Event)
 	{
 	  if (!worldCreated)
 	    {
-	      worldMap.setSize(10);
-	      terrainMap.setSize(10);
-	      worldWeather.setSize(10);
+	      worldMap.setSize(20);
+	      terrainMap.setSize(20);
+	      worldWeather.setSize(20);
 	      creators::fillTerrain(&worldMap);
 	      std::cout << std::endl;
 	      creators::fillTerrainDetails(&terrainMap, &worldMap);

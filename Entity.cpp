@@ -30,17 +30,29 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
 }
 
 // A function that sets in the course of action based on the decision made by the brain
-void Entity::processDecision(e_brainState decision)
+void Entity::processDecision(e_brainState decision, World* host, s_frameResolution* resPointer)
 {
   switch (decision)
     {
     case e_idle:
       break;
     case e_getFood:
+      resPointer->resultState = e_eatFood;
       break;
     case e_getWater:
       break;
     case e_takeNap:
+      break;
+    }
+}
+
+void Entity::resolveFrame(s_frameResolution* resultState)
+{
+  switch(resultState->resultState)
+    {
+    case e_eatFood:
+      break;
+    default:
       break;
     }
 }
@@ -50,8 +62,9 @@ void Entity::runFrame(World* host)
   // Check to see if the character is alive at all, if not no need to do anything else
   if (alive)
     {
+      s_frameResolution state;
       // Runs the decision making and then processes that decision to select a course of action
-      processDecision(smarts.runFrame(this));
+      processDecision(smarts.runFrame(this), host, &state);
 
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
@@ -159,6 +172,8 @@ void Entity::runFrame(World* host)
 	  std::cout << "Has passed away of old age" << std::endl;
 	  alive = false;
 	}
+
+      resolveFrame(&state);
     }
 }
 
