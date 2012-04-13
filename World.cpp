@@ -183,11 +183,14 @@ void World::runFrameWithInput(SDL_Event* Event)
 	}
       else if (Event->key.keysym.sym == SDLK_o)
 	{
+	  srand(time(NULL));
+	  int objX = (rand()%20);
+	  int objY = (rand()%20);
 	  Object newObj;
-	  newObj.initObject(0,0,Object::e_food);
+	  newObj.initObject(objX,objY,Object::e_food);
 	  std::cout << "New food object created" << std::endl;
 	  objects.push_back(newObj);
-	  std::cout << "Object added to world" << std::endl;
+	  std::cout << "Object added to world at " << objX << "," << objY << std::endl;
 	}
     }
   // Finally run the standard frame

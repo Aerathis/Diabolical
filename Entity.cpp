@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 
+#include "Object.h"
 #include "World.h"
 
 Entity::Entity()
@@ -37,7 +38,13 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
     case e_idle:
       break;
     case e_getFood:
-      resPointer->resultState = e_eatFood;
+      {
+	std::vector<Object>::iterator it;
+	for (it = host->getObjectList()->begin(); it != host->getObjectList()->end(); ++it)
+	  {
+	    std::cout << it->getObjVitals().x << std::endl;
+	  }
+      }
       break;
     case e_getWater:
       break;
@@ -68,7 +75,7 @@ void Entity::runFrame(World* host)
 
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
-      if (vitals.timeAlive % 1500 == 0)
+      if (vitals.timeAlive % 15 == 0)
 	{
 	  // The hunger section
 	  stats.hunger += 1;
