@@ -57,6 +57,10 @@ Map<int>* World::im_getWeatherMap()
   return &worldWeather;
 }
 
+Map<creators::e_terrainType>* World::im_getTerrainMap()
+{
+  return &terrainMap;
+}
 // Returns a pointer to the list of objects in the world.
 std::vector<Object>* World::getObjectList()
 {

@@ -22,6 +22,11 @@ class Entity
     e_idleFrame
   };
 
+  struct s_position
+  {
+    float x;
+    float y;
+  };
   struct s_frameResolution
   {
     e_frameState resultState;
@@ -57,6 +62,7 @@ class Entity
 
   void runFrame(World* host);
 
+  void moveToTargetLocation(float x, float y);
   void moveToTargetLocation(int x, int y);
   void moveToTarget(Entity* targ);
 
@@ -69,13 +75,13 @@ class Entity
   s_stats stats;
 
   bool alive;
-  float targetX, targetY;
+  s_position targetPos;
   Entity* target;
   Brain smarts;
   e_brainState decision;
 
   void processDecision(e_brainState decision, World* host, s_frameResolution* result);
-  void resolveFrame(s_frameResolution* frState);
+  void resolveFrame(s_frameResolution* frState, World* host);
 };
 
 #endif //ENTITY_H

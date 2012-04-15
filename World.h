@@ -44,6 +44,7 @@ class World
   Player* getPlayerPtr();
   Map<int>* im_getWeatherMap();
   Map<double>* im_getWorldMap();
+  Map<creators::e_terrainType>* im_getTerrainMap();
   std::vector<Object>* getObjectList();
 
   void registerPlayer();

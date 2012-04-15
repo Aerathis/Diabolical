@@ -14,8 +14,8 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
 {
   vitals.x = inX;
   vitals.y = inY;
-  targetX = inX;
-  targetY = inY;
+  targetPos.x = inX;
+  targetPos.y = inY;
   target = NULL;
   vitals.id = inId;
   vitals.timeAlive = 0;
@@ -25,7 +25,7 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   stats.hunger = 0;
   stats.thirst = 0;
   stats.tired = 0;
-  stats.moveSpeed = 500;
+  stats.moveSpeed = 50;
 
   alive = true;
 }
@@ -39,25 +39,63 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
       break;
     case e_getFood:
       {
+	Object* targetObj = 0;
+	float closeDist = 100000000000;
 	std::vector<Object>::iterator it;
 	for (it = host->getObjectList()->begin(); it != host->getObjectList()->end(); ++it)
 	  {
-	    std::cout << it->getObjVitals().x << std::endl;
+	    Object tempObj = *it;
+	    float diffX = abs(tempObj.getObjVitals().x - vitals.x);
+	    float diffY = abs(tempObj.getObjVitals().y - vitals.y);
+	    float len = sqrt(diffX*diffX+diffY*diffY);
+	    if (len < closeDist)
+	      {
+		closeDist = len;
+		targetObj = &*it;
+	      }
+	  }
+
+	if (targetObj)
+	  {
+	    resPointer->resultState = e_eatFood;
+	    resPointer->target = (void*)targetObj;
 	  }
       }
       break;
     case e_getWater:
+      {
+	int terSize = host->im_getTerrainMap()->getMapSize();
+	resPointer->resultState = e_drinkWater;
+      }
       break;
     case e_takeNap:
       break;
     }
 }
 
-void Entity::resolveFrame(s_frameResolution* resultState)
+void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 {
   switch(resultState->resultState)
     {
     case e_eatFood:
+      {
+	Object* targetFood = (Object*)resultState->target;
+	if (targetPos.x == targetFood->getObjVitals().x && targetPos.y == targetFood->getObjVitals().y)
+	  {
+	    std::cout << "Eat Da Food" << std::endl;
+	    stats.hunger = 0;
+	  }
+	else
+	  {
+	    targetPos.x = targetFood->getObjVitals().x;
+	    targetPos.y = targetFood->getObjVitals().y; 
+	  }
+      }
+      break;
+    case e_drinkWater:
+      {
+	stats.thirst = 0;
+      }
       break;
     default:
       break;
@@ -70,6 +108,8 @@ void Entity::runFrame(World* host)
   if (alive)
     {
       s_frameResolution state;
+      state.resultState = e_idleFrame;
+      state.target = 0;
       // Runs the decision making and then processes that decision to select a course of action
       processDecision(smarts.runFrame(this), host, &state);
 
@@ -135,10 +175,10 @@ void Entity::runFrame(World* host)
       // The movement section
       if (vitals.timeAlive % stats.moveSpeed == 0)
 	{
-	  if (vitals.x != targetX)
-	    vitals.x = (targetX > vitals.x ? vitals.x + 1 : vitals.x - 1);
-	  if (vitals.y != targetY)
-	    vitals.y = (targetY > vitals.y ? vitals.y + 1 : vitals.y - 1);
+	  if (vitals.x != targetPos.x)
+	    vitals.x = (targetPos.x > vitals.x ? vitals.x + 1 : vitals.x - 1);
+	  if (vitals.y != targetPos.y)
+	    vitals.y = (targetPos.y > vitals.y ? vitals.y + 1 : vitals.y - 1);
 	}
       if (target != NULL)
 	{
@@ -180,14 +220,20 @@ void Entity::runFrame(World* host)
 	  alive = false;
 	}
 
-      resolveFrame(&state);
+      resolveFrame(&state, host);
     }
+}
+
+void Entity::moveToTargetLocation(float x, float y)
+{
+  targetPos.x = x;
+  targetPos.y = y;
 }
 
 void Entity::moveToTargetLocation(int x, int y)
 {
-  targetX = x;
-  targetY = y;
+  targetPos.x = x;
+  targetPos.y = y;
 }
 
 void Entity::moveToTarget(Entity* targ)
