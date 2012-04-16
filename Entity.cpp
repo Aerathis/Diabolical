@@ -65,6 +65,65 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
     case e_getWater:
       {
 	int terSize = host->im_getTerrainMap()->getMapSize();
+	int iterCount = 0;
+	bool targetPicked = false;
+	while (!targetPicked)
+	  {
+	    for (int i = iterCount*(-1); i <= iterCount; i++)
+	      {
+		int y = vitals.y - iterCount;
+		y = (y >= 0 ? y : 0);
+		int x = vitals.x + i;
+		x = (x >= 0 ? x : 0);
+		x = (x <= terSize ? x : terSize);
+		creators::e_terrainType terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
+		if (terr == creators::e_shallowWater || terr == creators::e_water)
+		  {
+		    targetPicked = true;
+		    s_position* targPos = new s_position();
+		    targPos->x = x;
+		    targPos->y = y;
+		    resPointer->target = (void*)targPos;
+		  }
+		y = vitals.y + iterCount;
+		y = (y <= terSize ? y : terSize);
+		terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
+		if (terr == creators::e_shallowWater || terr == creators::e_water)
+		  {
+		    targetPicked = true;
+		    s_position* targPos = new s_position();
+		    targPos->x = x;
+		    targPos->y = y;
+		    resPointer->target = (void*)targPos;
+		  }
+		x = vitals.x - iterCount;
+		x = (x >= 0 ? x : 0);
+		y = vitals.y + i;
+		y = (y >= 0 ? y : 0);
+		y = (y <= terSize ? y : terSize);
+		terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
+		if (terr == creators::e_shallowWater || terr == creators::e_water)
+		  {
+		    targetPicked = true;
+		    s_position* targPos = new s_position();
+		    targPos->x = x;
+		    targPos->y = y;
+		    resPointer->target = (void*)targPos;
+		  }
+		x = vitals.x + iterCount;
+		x = (x <= terSize ? x : terSize);
+		terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
+		if (terr == creators::e_shallowWater || terr == creators::e_water)
+		  {
+		    targetPicked = true;
+		    s_position* targPos = new s_position();
+		    targPos->x = x;
+		    targPos->y = y;
+		    resPointer->target = (void*)targPos;
+		  }
+	      }
+	    iterCount++;
+	  }
 	resPointer->resultState = e_drinkWater;
       }
       break;
@@ -84,6 +143,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	  {
 	    std::cout << "Eat Da Food" << std::endl;
 	    stats.hunger = 0;
+	    host->consumeObject(targetFood);
 	  }
 	else
 	  {
@@ -94,6 +154,9 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
       break;
     case e_drinkWater:
       {
+	s_position* waterPos = (s_position*)resultState->target;
+	std::cout << waterPos->x << "," << waterPos->y << std::endl;
+	std::cout << host->im_getTerrainMap()->getLocationAtCoord(waterPos->x,waterPos->y) << std::endl;
 	stats.thirst = 0;
       }
       break;

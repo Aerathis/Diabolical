@@ -49,6 +49,8 @@ class World
 
   void registerPlayer();
 
+  bool consumeObject(Object* consumed);
+
   void runFrame();
   void runFrameWithInput(SDL_Event* Event);
 

@@ -76,9 +76,9 @@ namespace creators
     int hMin = 1000000000;
     int hMax = 0;
     // And off we go through the various locations in the map
-    for (int x = 0; x < mapSize; x++)
+    for (int y = 0; y < mapSize; y++)
       {
-	for (int y = 0; y < mapSize; y++)
+	for (int x = 0; x < mapSize; x++)
 	  {
 	    // Get the value for the cell and if it is higher or lower than the min or max, set the min/max to that value
 	    double hVal = perlin(x,y,&terrainGen);
@@ -92,9 +92,9 @@ namespace creators
       }
 
     // Not the most efficient, but it does the job. I can fix the speed problem later. Here I'm just normalizing the values to a sane scale. 
-    for (int x = 0; x < mapSize; x++)
+    for (int y = 0; y < mapSize; y++)
       {
-	for (int y = 0; y < mapSize; y++)
+	for (int x = 0; x < mapSize; x++)
 	  {
 	    double swap = terrainMap->getLocationAtCoord(x,y);
 	    swap = (swap-hMin)/(hMax-hMin);	    
@@ -111,9 +111,9 @@ namespace creators
   bool fillWeather(Map<int>* weatherMap)
   {
     int mapSize = weatherMap->getMapSize();
-    for (int x = 0; x < mapSize; x++)
+    for (int y = 0; y < mapSize; y++)
       {
-	for (int y = 0; y < mapSize; y++)
+	for (int x = 0; x < mapSize; x++)
 	  {
 	    weatherMap->setLocationAtCoord(x,y,37);
 	    std::cout << weatherMap->getLocationAtCoord(x,y) << " ";
@@ -127,9 +127,9 @@ namespace creators
   bool fillTerrainDetails(Map<e_terrainType>* terrainMap, Map<double>* worldMap)
   {
     int mapSize = terrainMap->getMapSize();
-    for (int x = 0; x < mapSize; x++)
+    for (int y = 0; y < mapSize; y++)
       {
-	for (int y = 0; y < mapSize; y++)
+	for (int x = 0; x < mapSize; x++)
 	  {
 	    if (worldMap->getLocationAtCoord(x,y) < 0.2)
 	      {

@@ -73,6 +73,20 @@ Map<double>* World::im_getWorldMap()
   // This is only to be used as immutable
   return &worldMap;
 }
+
+bool World::consumeObject(Object* consumed)
+{
+  std::vector<Object>::iterator it;
+  for (it = objects.begin(); it != objects.end(); ++it)
+    {
+      if (&*it == consumed)
+	{
+	  objects.erase(it);
+	  return true;
+	}
+    }
+  return false;
+}
  
 void World::runFrame()
 {
