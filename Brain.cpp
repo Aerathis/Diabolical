@@ -19,11 +19,11 @@ e_brainState Brain::runFrame(Entity* caller)
     {
       newState = e_getWater;
     }
-  if (caller->getStats().hunger > 50)
+  if (caller->getStats().hunger > 150)
     {
       newState = e_getFood;
     }
-  if (caller->getStats().thirst < 10 && caller->getStats().hunger < 10)
+  if (caller->getStats().thirst < 10 && caller->getStats().hunger < 150)
     {
       newState = e_idle;
     }

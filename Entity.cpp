@@ -25,7 +25,7 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   stats.hunger = 0;
   stats.thirst = 0;
   stats.tired = 0;
-  stats.moveSpeed = 50;
+  stats.moveSpeed = 5;
 
   alive = true;
 }
@@ -43,22 +43,25 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 	float closeDist = 100000000000;
 	std::vector<Object>::iterator it;
 	for (it = host->getObjectList()->begin(); it != host->getObjectList()->end(); ++it)
-	  {
+	  {	    
 	    Object tempObj = *it;
-	    float diffX = abs(tempObj.getObjVitals().x - vitals.x);
-	    float diffY = abs(tempObj.getObjVitals().y - vitals.y);
-	    float len = sqrt(diffX*diffX+diffY*diffY);
-	    if (len < closeDist)
-	      {
-		closeDist = len;
-		targetObj = &*it;
+	    if (tempObj.pollObject() == Object::e_food)
+	      {	      
+		float diffX = abs(tempObj.getObjVitals().x - vitals.x);
+		float diffY = abs(tempObj.getObjVitals().y - vitals.y);
+		float len = sqrt(diffX*diffX+diffY*diffY);
+		if (len < closeDist)
+		  {
+		    closeDist = len;
+		    targetObj = &*it;
+		  }
 	      }
-	  }
 
-	if (targetObj)
-	  {
-	    resPointer->resultState = e_eatFood;
-	    resPointer->target = (void*)targetObj;
+	    if (targetObj)
+	      {
+		resPointer->resultState = e_eatFood;
+		resPointer->target = (void*)targetObj;
+	      }
 	  }
       }
       break;
@@ -71,11 +74,12 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 	  {
 	    for (int i = iterCount*(-1); i <= iterCount; i++)
 	      {
+		// There's a bug in here with at least one of the getLocationAtCoord params	  
 		int y = vitals.y - iterCount;
 		y = (y >= 0 ? y : 0);
 		int x = vitals.x + i;
 		x = (x >= 0 ? x : 0);
-		x = (x <= terSize ? x : terSize);
+		x = (x < terSize ? x : terSize-1);
 		creators::e_terrainType terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
 		if (terr == creators::e_shallowWater || terr == creators::e_water)
 		  {
@@ -86,7 +90,7 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 		    resPointer->target = (void*)targPos;
 		  }
 		y = vitals.y + iterCount;
-		y = (y <= terSize ? y : terSize);
+		y = (y < terSize ? y : terSize-1);
 		terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
 		if (terr == creators::e_shallowWater || terr == creators::e_water)
 		  {
@@ -100,7 +104,7 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 		x = (x >= 0 ? x : 0);
 		y = vitals.y + i;
 		y = (y >= 0 ? y : 0);
-		y = (y <= terSize ? y : terSize);
+		y = (y < terSize ? y : terSize-1);
 		terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
 		if (terr == creators::e_shallowWater || terr == creators::e_water)
 		  {
@@ -111,7 +115,7 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 		    resPointer->target = (void*)targPos;
 		  }
 		x = vitals.x + iterCount;
-		x = (x <= terSize ? x : terSize);
+		x = (x < terSize ? x : terSize-1);
 		terr = host->im_getTerrainMap()->getLocationAtCoord(x,y);
 		if (terr == creators::e_shallowWater || terr == creators::e_water)
 		  {
@@ -139,25 +143,30 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
     case e_eatFood:
       {
 	Object* targetFood = (Object*)resultState->target;
-	if (targetPos.x == targetFood->getObjVitals().x && targetPos.y == targetFood->getObjVitals().y)
+	if (vitals.x == targetFood->getObjVitals().x && vitals.y == targetFood->getObjVitals().y)
 	  {
-	    std::cout << "Eat Da Food" << std::endl;
+	    std::cout << "Eat Da Food at " << targetFood->getObjVitals().x << "," << targetFood->getObjVitals().y << "!!" << std::endl;
 	    stats.hunger = 0;
 	    host->consumeObject(targetFood);
 	  }
 	else
 	  {
-	    targetPos.x = targetFood->getObjVitals().x;
-	    targetPos.y = targetFood->getObjVitals().y; 
+	    moveToTargetLocation(targetFood->getObjVitals().x, targetFood->getObjVitals().y);
 	  }
       }
       break;
     case e_drinkWater:
       {
-	s_position* waterPos = (s_position*)resultState->target;
-	std::cout << waterPos->x << "," << waterPos->y << std::endl;
-	std::cout << host->im_getTerrainMap()->getLocationAtCoord(waterPos->x,waterPos->y) << std::endl;
-	stats.thirst = 0;
+	s_position* waterPos = (s_position*)resultState->target;      
+	if (vitals.x == waterPos->x && vitals.y == waterPos->y)
+	  {
+	    std::cout << "Drink da watah at " << waterPos->x << "," << waterPos->y << "!!" << std::endl;
+	    stats.thirst = 0;
+	  }
+	else
+	  {
+	    moveToTargetLocation(waterPos->x, waterPos->y);
+	  }
       }
       break;
     default:
@@ -182,15 +191,15 @@ void Entity::runFrame(World* host)
 	{
 	  // The hunger section
 	  stats.hunger += 1;
-	  if (stats.hunger == 50)
+	  if (stats.hunger == 150)
 	    {
 	      std::cout << "Getting hungry" << std::endl;
 	    }
-	  else if (stats.hunger == 75)
+	  else if (stats.hunger == 200)
 	    {
 	      std::cout << "Getting very hungry" << std::endl;
 	    }
-	  else if (stats.hunger == 93)
+	  else if (stats.hunger == 270)
 	    {
 	      std::cout << "Starving!!" << std::endl;
 	    }
@@ -257,7 +266,7 @@ void Entity::runFrame(World* host)
 	}
 
       // Check to see for any adverse effects based on the current situation
-      if (stats.hunger == 100)
+      if (stats.hunger == 300)
 	{
 	  std::cout << "Has starved to death" << std::endl;
 	  alive = false;

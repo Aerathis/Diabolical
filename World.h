@@ -36,6 +36,9 @@ class World
 
   bool worldCreated;
 
+  void createNewFood();
+  void createNewFire();
+
  public:
   World();
   void initWorld();

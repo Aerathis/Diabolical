@@ -26,6 +26,8 @@ void World::initWorld()
   worldMap.setSize(0);
   terrainMap.setSize(0);
   worldWeather.setSize(0);
+  
+  srand(time(NULL));
 
   selected = NULL;
 }
@@ -90,8 +92,13 @@ bool World::consumeObject(Object* consumed)
  
 void World::runFrame()
 {
+  
   // The update function, this is going to be run when there's no input
   //worldWeather.runFrame();
+  if (rand()%1000 == 1)
+    {
+      createNewFood();
+    }
   std::vector<Entity>::iterator it;
   for (it = citizens.begin(); it != citizens.end(); ++it)
     {
@@ -200,17 +207,36 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       else if (Event->key.keysym.sym == SDLK_o)
+	{	 
+	  createNewFood();
+	}
+      else if (Event->key.keysym.sym == SDLK_f)
 	{
-	  srand(time(NULL));
-	  int objX = (rand()%20);
-	  int objY = (rand()%20);
-	  Object newObj;
-	  newObj.initObject(objX,objY,Object::e_food);
-	  std::cout << "New food object created" << std::endl;
-	  objects.push_back(newObj);
-	  std::cout << "Object added to world at " << objX << "," << objY << std::endl;
+	  createNewFire();
 	}
     }
   // Finally run the standard frame
   runFrame();
+}
+
+void World::createNewFood()
+{
+  int objX = (rand()%20);
+  int objY = (rand()%20);
+  Object newObj;
+  newObj.initObject(objX,objY,Object::e_food);
+  std::cout << "New food object created" << std::endl;
+  objects.push_back(newObj);
+  std::cout << "Object added to world at " << objX << "," << objY << std::endl;
+}
+
+void World::createNewFire()
+{
+  int objX = (rand()%20);
+  int objY = (rand()%20);
+  Object newObj;
+  newObj.initObject(objX,objY,Object::e_fire);
+  std::cout << "New fire created" << std::endl;
+  objects.push_back(newObj);
+  std::cout << "Object added to world at " << objX << "," << objY << std::endl;
 }
