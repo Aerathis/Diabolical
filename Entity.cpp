@@ -25,9 +25,10 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   stats.hunger = 0;
   stats.thirst = 0;
   stats.tired = 0;
-  stats.moveSpeed = 5;
+  stats.moveSpeed = 50;
 
   alive = true;
+  nightyBye = false;
 }
 
 // A function that sets in the course of action based on the decision made by the brain
@@ -132,6 +133,10 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
       }
       break;
     case e_takeNap:
+      {
+	resPointer->resultState = e_nap;
+	resPointer->target = NULL;
+      }
       break;
     }
 }
@@ -169,6 +174,32 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	  }
       }
       break;
+    case e_nap:
+      {
+	if (!nightyBye)
+	  {
+	    if (stats.thirst < 70 && stats.hunger < 150)
+	      {	      
+		std::cout << "Taking a nap" << std::endl;
+		nightyBye = true;
+	      }
+	    else
+	      {
+		if (stats.thirst > 70)
+		  std::cout << "Can't sleep: Too thirsty" << std::endl;
+		if (stats.hunger > 150)
+		  std::cout << "Can't sleep: Too hungry" << std::endl;
+	      }
+	  }
+	if (nightyBye)
+	  {
+	    if (stats.thirst > 70)
+	      {
+		std::cout << "Wakes up: Thirsty" << std::endl;
+		nightyBye = false;
+	      }
+	  }
+      }
     default:
       break;
     }
@@ -187,7 +218,7 @@ void Entity::runFrame(World* host)
 
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
-      if (vitals.timeAlive % 15 == 0)
+      if (vitals.timeAlive % 150 == 0)
 	{
 	  // The hunger section
 	  stats.hunger += 1;
@@ -241,6 +272,17 @@ void Entity::runFrame(World* host)
 	  else if (vitals.coreTemp == 42)
 	    {
 	      std::cout << "Is burning up" << std::endl;
+	    }
+
+	  // The sleepy section
+	  if (nightyBye)
+	    stats.tired -= 10;
+	  else
+	    stats.tired += 1;
+	  if (nightyBye && stats.tired == 0)
+	    {
+	      std::cout << "Waking up" << std::endl;
+	      nightyBye = false;
 	    }
 	}
 

@@ -23,13 +23,17 @@ e_brainState Brain::runFrame(Entity* caller)
     {
       newState = e_getFood;
     }
-  if (caller->getStats().thirst < 10 && caller->getStats().hunger < 150)
-    {
-      newState = e_idle;
-    }
   if (caller->getStats().tired > 70)
     {
       newState = e_takeNap;
+    }
+  if (caller->getStats().thirst < 50 && caller->getStats().hunger < 150)
+    {
+      newState = e_idle;
+    }
+  if (caller->getStats().tired < 70)
+    {
+      newState = e_idle;
     }
 
   // If the brain has changed its mind since the last time it made a decision

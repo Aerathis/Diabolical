@@ -75,6 +75,7 @@ class Entity
   s_stats stats;
 
   bool alive;
+  bool nightyBye;
   s_position targetPos;
   Entity* target;
   Brain smarts;

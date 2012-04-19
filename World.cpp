@@ -95,7 +95,7 @@ void World::runFrame()
   
   // The update function, this is going to be run when there's no input
   //worldWeather.runFrame();
-  if (rand()%1000 == 1)
+  if (rand()%10000 == 1)
     {
       createNewFood();
     }
