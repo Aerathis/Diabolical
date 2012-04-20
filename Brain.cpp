@@ -15,6 +15,10 @@ e_brainState Brain::runFrame(Entity* caller)
 {
   e_brainState newState = currentState;
   // Cycle through various extremely basic scenarios and select a decision
+  if (caller->getStats().tired < 370)
+    {
+      newState = e_idle;
+    }
   if (caller->getStats().thirst > 50)
     {
       newState = e_getWater;
@@ -23,15 +27,11 @@ e_brainState Brain::runFrame(Entity* caller)
     {
       newState = e_getFood;
     }
-  if (caller->getStats().tired > 70)
+  if (caller->getStats().tired > 370)
     {
       newState = e_takeNap;
     }
   if (caller->getStats().thirst < 50 && caller->getStats().hunger < 150)
-    {
-      newState = e_idle;
-    }
-  if (caller->getStats().tired < 70)
     {
       newState = e_idle;
     }

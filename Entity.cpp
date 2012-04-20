@@ -147,30 +147,52 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
     {
     case e_eatFood:
       {
-	Object* targetFood = (Object*)resultState->target;
-	if (vitals.x == targetFood->getObjVitals().x && vitals.y == targetFood->getObjVitals().y)
+	if (!nightyBye)
 	  {
-	    std::cout << "Eat Da Food at " << targetFood->getObjVitals().x << "," << targetFood->getObjVitals().y << "!!" << std::endl;
-	    stats.hunger = 0;
-	    host->consumeObject(targetFood);
+	    Object* targetFood = (Object*)resultState->target;
+	    if (vitals.x == targetFood->getObjVitals().x && vitals.y == targetFood->getObjVitals().y)
+	      {
+		std::cout << "Eat Da Food at " << targetFood->getObjVitals().x << "," << targetFood->getObjVitals().y << "!!" << std::endl;
+		stats.hunger = 0;
+		host->consumeObject(targetFood);
+	      }
+	    else
+	      {
+		moveToTargetLocation(targetFood->getObjVitals().x, targetFood->getObjVitals().y);
+	      }
 	  }
 	else
 	  {
-	    moveToTargetLocation(targetFood->getObjVitals().x, targetFood->getObjVitals().y);
+	    if (stats.hunger > 250)
+	      {
+		nightyBye = false;
+		std::cout << "Waking up: Extremely hungry" << std::endl;
+	      }
 	  }
       }
       break;
     case e_drinkWater:
       {
-	s_position* waterPos = (s_position*)resultState->target;      
-	if (vitals.x == waterPos->x && vitals.y == waterPos->y)
+	if (!nightyBye)
 	  {
-	    std::cout << "Drink da watah at " << waterPos->x << "," << waterPos->y << "!!" << std::endl;
-	    stats.thirst = 0;
+	    s_position* waterPos = (s_position*)resultState->target;      
+	    if (vitals.x == waterPos->x && vitals.y == waterPos->y)
+	      {
+		std::cout << "Drink da watah at " << waterPos->x << "," << waterPos->y << "!!" << std::endl;
+		stats.thirst = 0;
+	      }
+	    else
+	      {
+		moveToTargetLocation(waterPos->x, waterPos->y);
+	      }
 	  }
 	else
 	  {
-	    moveToTargetLocation(waterPos->x, waterPos->y);
+	    if (stats.thirst > 70)
+	      {
+		nightyBye = false;
+		std::cout << "Waking up: Extremely thirsty" << std::endl;
+	      }	  
 	  }
       }
       break;
@@ -186,9 +208,15 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	    else
 	      {
 		if (stats.thirst > 70)
-		  std::cout << "Can't sleep: Too thirsty" << std::endl;
-		if (stats.hunger > 150)
-		  std::cout << "Can't sleep: Too hungry" << std::endl;
+		  {
+		    std::cout << "Can't sleep: Too thirsty" << std::endl;
+		    stats.tired = 360;
+		  }
+		if (stats.hunger > 250)
+		  {
+		    std::cout << "Can't sleep: Too hungry" << std::endl;
+		    stats.tired = 360;
+		  }
 	      }
 	  }
 	if (nightyBye)
@@ -196,6 +224,21 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	    if (stats.thirst > 70)
 	      {
 		std::cout << "Wakes up: Thirsty" << std::endl;
+		nightyBye = false;
+	      }
+	    if (stats.hunger > 200)
+	      {
+		std::cout << "Wakes up: Hungry" << std::endl;
+		nightyBye = false;
+	      }
+	    if (vitals.coreTemp > 42)
+	      {
+		std::cout << "Wakes up: Too hot" << std::endl;
+		nightyBye = false;
+	      }
+	    if (vitals.coreTemp < 25)
+	      {
+		std::cout << "Wakes up: Too cold" << std::endl;
 		nightyBye = false;
 	      }
 	  }
