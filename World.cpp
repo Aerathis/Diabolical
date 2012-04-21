@@ -25,7 +25,7 @@ void World::initWorld()
 
   worldMap.setSize(0);
   terrainMap.setSize(0);
-  worldWeather.setSize(0);
+  worldWeather.setWeatherMapSize(0);
   
   srand(time(NULL));
 
@@ -56,7 +56,7 @@ Player* World::getPlayerPtr()
 Map<int>* World::im_getWeatherMap()
 {
   // This is only to be used as immutable
-  return &worldWeather;
+  return worldWeather.getWeatherMap();
 }
 
 Map<creators::e_terrainType>* World::im_getTerrainMap()
@@ -122,12 +122,12 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    {
 	      worldMap.setSize(20);
 	      terrainMap.setSize(20);
-	      worldWeather.setSize(20);
+	      worldWeather.setWeatherMapSize(20);
 	      creators::fillTerrain(&worldMap);
 	      std::cout << std::endl;
 	      creators::fillTerrainDetails(&terrainMap, &worldMap);
 	      std::cout << std::endl;
-	      creators::fillWeather(&worldWeather);
+	      creators::fillWeather(worldWeather.getWeatherMap());
 	      worldCreated = true;
 	    }
 	  else if(worldCreated)
@@ -186,7 +186,7 @@ void World::runFrameWithInput(SDL_Event* Event)
       // Handle when the "W" key is pressed
       else if (Event->key.keysym.sym == SDLK_w)
 	{
-	  worldWeather.setLocationAtCoord(0,0,33);
+	  worldWeather.getWeatherMap()->setLocationAtCoord(0,0,33);
 	}
       // Handle when the "T" key is pressed
       else if (Event->key.keysym.sym == SDLK_t)

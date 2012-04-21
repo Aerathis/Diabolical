@@ -9,7 +9,7 @@ void Weather::setWeatherMapSize(int size)
   weatherMap.setSize(size);
 }
 
-Map<double>* Weather::getWeatherMap()
+Map<int>* Weather::getWeatherMap()
 {
   return &weatherMap;
 }

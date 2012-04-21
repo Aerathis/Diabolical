@@ -57,7 +57,6 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 		    targetObj = &*it;
 		  }
 	      }
-
 	    if (targetObj)
 	      {
 		resPointer->resultState = e_eatFood;
@@ -200,33 +199,33 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
       {
 	if (!nightyBye)
 	  {
-	    if (stats.thirst < 70 && stats.hunger < 150)
+	    if (stats.thirst < 800 && stats.hunger < 800)
 	      {	      
 		std::cout << "Taking a nap" << std::endl;
 		nightyBye = true;
 	      }
 	    else
 	      {
-		if (stats.thirst > 70)
+		if (stats.thirst > 800)
 		  {
 		    std::cout << "Can't sleep: Too thirsty" << std::endl;
-		    stats.tired = 360;
+		    stats.tired = 760;
 		  }
-		if (stats.hunger > 250)
+		if (stats.hunger > 800)
 		  {
 		    std::cout << "Can't sleep: Too hungry" << std::endl;
-		    stats.tired = 360;
+		    stats.tired = 760;
 		  }
 	      }
 	  }
 	if (nightyBye)
 	  {
-	    if (stats.thirst > 70)
+	    if (stats.thirst > 800)
 	      {
 		std::cout << "Wakes up: Thirsty" << std::endl;
 		nightyBye = false;
 	      }
-	    if (stats.hunger > 200)
+	    if (stats.hunger > 800)
 	      {
 		std::cout << "Wakes up: Hungry" << std::endl;
 		nightyBye = false;
@@ -264,27 +263,27 @@ void Entity::runFrame(World* host)
       if (vitals.timeAlive % 150 == 0)
 	{
 	  // The hunger section
-	  stats.hunger += 1;
-	  if (stats.hunger == 150)
+	  stats.hunger += 5;
+	  if (stats.hunger == 500)
 	    {
 	      std::cout << "Getting hungry" << std::endl;
 	    }
-	  else if (stats.hunger == 200)
+	  else if (stats.hunger == 700)
 	    {
 	      std::cout << "Getting very hungry" << std::endl;
 	    }
-	  else if (stats.hunger == 270)
+	  else if (stats.hunger == 970)
 	    {
 	      std::cout << "Starving!!" << std::endl;
 	    }
 
 	  // The thirsty section
-	  stats.thirst += 1;
-	  if (stats.thirst == 75)
+	  stats.thirst += 10;
+	  if (stats.thirst == 750)
 	    {
 	      std::cout << "Is extremely thirsty" << std::endl;
 	    }
-	  if (stats.thirst == 93)
+	  if (stats.thirst == 930)
 	    {
 	      std::cout << "Is dying of thirst" << std::endl;
 	    }
@@ -319,7 +318,7 @@ void Entity::runFrame(World* host)
 
 	  // The sleepy section
 	  if (nightyBye)
-	    stats.tired -= 10;
+	    stats.tired -= 50;
 	  else
 	    stats.tired += 1;
 	  if (nightyBye && stats.tired == 0)
@@ -351,12 +350,12 @@ void Entity::runFrame(World* host)
 	}
 
       // Check to see for any adverse effects based on the current situation
-      if (stats.hunger == 300)
+      if (stats.hunger == 1000)
 	{
 	  std::cout << "Has starved to death" << std::endl;
 	  alive = false;
 	}
-      if (stats.thirst == 100)
+      if (stats.thirst == 1000)
 	{
 	  std::cout << "Has died of dehydration" << std::endl;
 	  alive = false;

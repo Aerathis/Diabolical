@@ -32,7 +32,7 @@ class World
   std::vector<Object> objects;
   Map<double> worldMap;
   Map<creators::e_terrainType> terrainMap;
-  Map<int> worldWeather;
+  Weather worldWeather;
 
   bool worldCreated;
 
