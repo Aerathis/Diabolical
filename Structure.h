@@ -1,6 +1,8 @@
 #ifndef _STRUCTURE_H
 #define _STRUCTURE_H
 
+#include <map>
+
 #include "Object.h"
 
 class Entity;
@@ -11,6 +13,12 @@ class Structure : public Object
   enum e_structType
   {
     e_home
+  };
+
+  enum e_materialType
+  {
+    e_wood,
+    e_stone
   };
 
   Structure();
@@ -33,6 +41,7 @@ class Structure : public Object
   bool completed;
   bool underConstruction;
   bool ownable;
+  std::map<e_materialType,int> materialReqs;
   
   Entity* owner;
 };
