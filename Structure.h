@@ -42,6 +42,7 @@ class Structure : public Object
   bool underConstruction;
   bool ownable;
   std::map<e_materialType,int> materialReqs;  
+  
   Entity* owner;
 };
 
