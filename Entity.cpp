@@ -31,6 +31,7 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   nightyBye = false;
 
   home = NULL;
+  priorFrameState.resultState = e_idleFrame;
 }
 
 // A function that sets in the course of action based on the decision made by the brain
