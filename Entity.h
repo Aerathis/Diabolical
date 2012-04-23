@@ -72,6 +72,8 @@ class Entity
   s_stats getStats();
   s_skills getSkills();
 
+  bool hasHome();
+
  private:
   s_vitals vitals;
   s_stats stats;
