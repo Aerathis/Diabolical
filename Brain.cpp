@@ -48,7 +48,6 @@ e_brainState Brain::runFrame(Entity* caller)
       std::cout << "New State: " << newState << std::endl;
       currentState = newState;
     }
-
   return currentState;
 }
 
