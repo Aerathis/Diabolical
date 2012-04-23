@@ -464,3 +464,15 @@ Entity::s_stats Entity::getStats()
 {
   return stats;
 }
+
+bool Entity::hasHome()
+{
+  if (home == NULL)
+    {
+      return false;
+    }
+  else
+    {
+      return true;
+    }
+}

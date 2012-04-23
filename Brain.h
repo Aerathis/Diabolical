@@ -14,7 +14,6 @@ enum e_brainState
 
 class Brain
 {
-
   // This brain is the very basicest of brains. It is only really meant to deal with the 
   // Most basic of survival stuff, other more complicated brains are likely to have more 
   // Interesting thought processes. 
