@@ -19,6 +19,7 @@ class Entity
     e_eatFood,
     e_drinkWater,
     e_nap,
+    e_buildStructure,
     e_idleFrame
   };
 
@@ -80,6 +81,8 @@ class Entity
   Entity* target;
   Brain smarts;
   e_brainState decision;
+  s_frameResolution frameState;
+  s_frameResolution priorFrameState;
 
   void processDecision(e_brainState decision, World* host, s_frameResolution* result);
   void resolveFrame(s_frameResolution* frState, World* host);

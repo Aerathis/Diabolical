@@ -69,6 +69,11 @@ std::vector<Object>* World::getObjectList()
   return &objects;
 }
 
+std::vector<Structure>* World::getStructureList()
+{
+  return &structures;
+}
+
 // Returns a pointer to the worldMap, which shouldn't be modified outside of this file
 Map<double>* World::im_getWorldMap()
 {
@@ -103,6 +108,11 @@ void World::runFrame()
   for (it = citizens.begin(); it != citizens.end(); ++it)
     {
       it->runFrame(this);
+    }
+  std::vector<Structure>::iterator structIt;
+  for (structIt = structures.begin(); structIt != structures.end(); ++structIt)
+    {
+      structIt->runFrame();
     }
 }
 
@@ -162,8 +172,19 @@ void World::runFrameWithInput(SDL_Event* Event)
       // Handle when the "S" key is pressed
       else if (Event->key.keysym.sym == SDLK_s)
 	{
-	  std::cout << "Clearing Selection" << std::endl;
-	  selected = NULL;
+	  if (selected)
+	    {
+	      std::cout << "Clearing Selection" << std::endl;
+	      selected = NULL;
+	    }
+	  else
+	    {
+	      std::cout << "Creating new structure" << std::endl;
+	      Structure temp;
+	      temp.placeObject(0,0);
+	      structures.push_back(temp);
+	      std::cout << "Structure added to list" << std::endl;
+	    }
 	}
       // Handle when the "1" key is pressed
       else if (Event->key.keysym.sym == SDLK_1)
@@ -200,10 +221,19 @@ void World::runFrameWithInput(SDL_Event* Event)
       // Handle when the "M" key is pressed
       else if (Event->key.keysym.sym == SDLK_m)
 	{
-	  if (selected != NULL)
+	  if (structures.size() > 0)
 	    {
-	      std::cout << "Selected entity moving to (5,4)" << std::endl;
-	      selected->moveToTargetLocation(5,4);
+	      std::cout << "Starting construction on first structure" << std::endl;
+	      structures[0].startConstruction();	      
+	    }
+	}
+      else if (Event->key.keysym.sym == SDLK_r)
+	{
+	  std::vector<Structure>::iterator it;
+	  for (it = structures.begin(); it != structures.end(); ++it)
+	    {
+	      Structure temp = *it;
+	      temp.structureReport();
 	    }
 	}
       else if (Event->key.keysym.sym == SDLK_o)

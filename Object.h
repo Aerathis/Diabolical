@@ -8,7 +8,8 @@ class Object
   enum e_objectType 
   {
     e_food,
-    e_fire
+    e_fire,
+    e_structure
   };
 
   struct s_objVitals

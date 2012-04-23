@@ -12,6 +12,7 @@
 #include "Map.h"
 #include "Object.h"
 #include "Player.h"
+#include "Structure.h"
 #include "Weather.h"
 
 class World
@@ -30,6 +31,7 @@ class World
 
   std::vector<Entity> citizens;
   std::vector<Object> objects;
+  std::vector<Structure> structures;
   Map<double> worldMap;
   Map<creators::e_terrainType> terrainMap;
   Weather worldWeather;
@@ -49,6 +51,7 @@ class World
   Map<double>* im_getWorldMap();
   Map<creators::e_terrainType>* im_getTerrainMap();
   std::vector<Object>* getObjectList();
+  std::vector<Structure>* getStructureList();
 
   void registerPlayer();
 

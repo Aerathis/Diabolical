@@ -137,6 +137,28 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 	resPointer->target = NULL;
       }
       break;
+    case e_buildStuff:
+      {
+	std::vector<Structure>* structList = host->getStructureList();
+	if (structList->size() > 0)
+	  {
+	    std::vector<Structure>::iterator structIt;
+	    for (structIt = structList->begin(); structIt != structList->end(); ++structIt)
+	      {
+		if (structIt->canStartWork() || structIt->isUnderConstruction())
+		  {
+		    resPointer->resultState = e_buildStructure;
+		    resPointer->target = (void*)&*structIt;
+		  }		
+	      }
+	  }
+	else
+	  {
+	    resPointer->resultState = e_idleFrame;
+	    resPointer->target = NULL;
+	  }
+      }
+      break;
     }
 }
 
@@ -242,6 +264,23 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	      }
 	  }
       }
+    case e_buildStructure:
+      {
+	Structure* buildTarget = (Structure*)resultState->target;       
+	if (buildTarget->getObjVitals().x == vitals.x && buildTarget->getObjVitals().y == vitals.y)
+	  {	    
+	    if (buildTarget->canStartWork())
+	      {
+		std::cout << "At build target location" << std::endl;
+		buildTarget->startConstruction();		
+	      }	   
+	  }
+	else
+	  {	    
+	    moveToTargetLocation(buildTarget->getObjVitals().x, buildTarget->getObjVitals().y);
+	  }
+      }
+      break;
     default:
       break;
     }
@@ -252,12 +291,28 @@ void Entity::runFrame(World* host)
   // Check to see if the character is alive at all, if not no need to do anything else
   if (alive)
     {
-      s_frameResolution state;
-      state.resultState = e_idleFrame;
-      state.target = 0;
+      frameState.resultState = e_idleFrame;
+      frameState.target = 0;
       // Runs the decision making and then processes that decision to select a course of action
-      processDecision(smarts.runFrame(this), host, &state);
-
+      processDecision(smarts.runFrame(this), host, &frameState);      
+      if (frameState.resultState != priorFrameState.resultState)
+	{
+	  std::cout << "resultState changed between frames" << std::endl;
+	  std::cout << "Old result state: " << priorFrameState.resultState << std::endl;  	  
+	  if (priorFrameState.resultState == e_buildStructure)
+	    {	    
+	      Structure* oldStruct = (Structure*)priorFrameState.target;
+	      if (oldStruct->isCompleted())
+		{
+		  std::cout << "Stopping construction: Finished" << std::endl;
+		}
+	      else
+		{
+		  oldStruct->pauseConstruction();
+		  std::cout << "Pausing construction" << std::endl;
+		}
+	    }	  	  
+	}
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
       if (vitals.timeAlive % 150 == 0)
@@ -376,7 +431,8 @@ void Entity::runFrame(World* host)
 	  alive = false;
 	}
 
-      resolveFrame(&state, host);
+      resolveFrame(&frameState, host);
+      priorFrameState = frameState;
     }
 }
 

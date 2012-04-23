@@ -36,6 +36,10 @@ e_brainState Brain::runFrame(Entity* caller)
       newState = e_takeNap;
     }
 
+  if (newState == e_idle)
+    {
+      newState = makeDecision(caller);
+    }
   // If the brain has changed its mind since the last time it made a decision
   // it announces that change and applies it to the current decision
   if (newState != currentState)
@@ -46,4 +50,9 @@ e_brainState Brain::runFrame(Entity* caller)
     }
 
   return currentState;
+}
+
+e_brainState Brain::makeDecision(Entity* caller)
+{
+  return e_buildStuff;
 }

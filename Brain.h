@@ -8,7 +8,8 @@ enum e_brainState
     e_idle,
     e_getFood,
     e_getWater,
-    e_takeNap
+    e_takeNap,
+    e_buildStuff
   };
 
 class Brain
@@ -26,6 +27,7 @@ class Brain
 
  private:
   e_brainState currentState;
+  e_brainState makeDecision(Entity* caller);
 };
 
 #endif //BRAIN_H
