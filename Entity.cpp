@@ -29,6 +29,8 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
 
   alive = true;
   nightyBye = false;
+
+  home = NULL;
 }
 
 // A function that sets in the course of action based on the decision made by the brain
