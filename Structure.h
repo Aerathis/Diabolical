@@ -3,6 +3,8 @@
 
 #include "Object.h"
 
+class Entity;
+
 class Structure : public Object
 {
  public:
@@ -17,6 +19,8 @@ class Structure : public Object
   bool canStartWork();
   bool isUnderConstruction();
   bool isCompleted();
+  bool canHaveOwner();
+  void changeOwner(Entity* newOwner);
   void startConstruction();
   void pauseConstruction();
 
@@ -28,6 +32,9 @@ class Structure : public Object
   int constructionTimeScale;
   bool completed;
   bool underConstruction;
+  bool ownable;
+  
+  Entity* owner;
 };
 
 #endif //STRUCTURE_H

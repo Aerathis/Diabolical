@@ -8,6 +8,7 @@
 #include "Map.h"
 
 class World;
+class Structure;
 
 class Entity
 {
@@ -83,6 +84,8 @@ class Entity
   e_brainState decision;
   s_frameResolution frameState;
   s_frameResolution priorFrameState;
+
+  Structure* home;
 
   void processDecision(e_brainState decision, World* host, s_frameResolution* result);
   void resolveFrame(s_frameResolution* frState, World* host);

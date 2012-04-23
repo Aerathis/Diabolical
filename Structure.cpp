@@ -9,6 +9,8 @@ Structure::Structure() : Object(Object::e_structure)
   constructionTimeScale = 1;
   completed = false;
   underConstruction = false;
+  ownable = true;
+  owner = NULL;
 }
 
 void Structure::runFrame()
@@ -46,6 +48,30 @@ bool Structure::isUnderConstruction()
 bool Structure::isCompleted()
 {
   return completed;
+}
+
+bool Structure::canHaveOwner()
+{
+  if (ownable)
+    {
+      if (owner == NULL)
+	{
+	  return true;
+	}
+      else
+	{
+	  return false;
+	}
+    }
+  else
+    {
+      return false;
+    }
+}
+
+void Structure::changeOwner(Entity* newOwner)
+{
+  owner = newOwner;
 }
 
 void Structure::structureReport()
