@@ -1,6 +1,8 @@
 #ifndef _STRUCTURE_H
 #define _STRUCTURE_H
 
+#define COMPLETE 10000
+
 #include <map>
 
 #include "Object.h"
@@ -38,10 +40,13 @@ class Structure : public Object
   e_structType structType;
   int completionPercent;
   int constructionTimeScale;
+  int totalMats;
   bool completed;
   bool underConstruction;
+  bool needMats;
   bool ownable;
-  std::map<e_materialType,int> materialReqs;  
+  std::map<e_materialType,int> materialReqs;
+  std::map<e_materialType,int> materialsPresent;
   
   Entity* owner;
 };

@@ -9,8 +9,17 @@ Structure::Structure() : Object(Object::e_structure)
   constructionTimeScale = 1;
   completed = false;
   underConstruction = false;
+  needMats = false;
   ownable = true;
   owner = NULL;
+  materialReqs[e_wood] = 10;
+  materialReqs[e_stone] = 1;
+  totalMats = materialReqs[e_wood] + materialReqs[e_stone];
+  //materialsPresent[e_wood] = 0;
+  //materialsPresent[e_stone] = 0;
+  // Total debugging hack make sure to remove when testing is complete
+  materialsPresent[e_stone] = 1;
+  materialsPresent[e_wood] = 0;
 }
 
 void Structure::runFrame()
@@ -18,9 +27,38 @@ void Structure::runFrame()
   if (underConstruction)
     {
       completionPercent += 1 * constructionTimeScale;
-      if (completionPercent >= 10000)
+      int currentOutMats = materialReqs[e_wood] + materialReqs[e_stone];
+      int remainScale = totalMats - currentOutMats;
+      int perc = int((float)COMPLETE/(float)totalMats);      
+      if (completionPercent >= (perc * remainScale))
 	{
-	  completionPercent = 10000;
+	  if (materialsPresent[e_wood] == 0 && materialsPresent[e_stone] == 0)
+	    {
+	      std::cout << "Construction Paused: Need materials" << std::endl;
+	      underConstruction = false;
+	      needMats = true;
+	    }
+	  else
+	    {
+	      bool needWood = (materialReqs[e_wood] > 0 ? true : false);
+	      bool hasWood = (materialsPresent[e_wood] > 0 ? true : false);
+	      bool needStone = (materialReqs[e_stone] > 0 ? true : false);
+	      bool hasStone = (materialsPresent[e_stone] > 0 ? true : false);
+	      if (needWood && needStone)
+		{
+		  
+		}
+	      else if (needWood && !needStone)
+		{
+		}
+	      else if (needStone && !needWood)
+		{
+		}
+	    }
+	}
+      if (completionPercent >= COMPLETE)
+	{
+	  completionPercent = COMPLETE;
 	  completed = true;
 	  underConstruction = false;
 	  std::cout << "Construction completed" << std::endl;
@@ -30,7 +68,7 @@ void Structure::runFrame()
 
 bool Structure::canStartWork()
 {
-  if (completed || underConstruction)
+  if (completed || underConstruction || needMats)
     {
       return false;
     }
