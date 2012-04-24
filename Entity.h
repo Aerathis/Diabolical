@@ -73,6 +73,7 @@ class Entity
   s_skills getSkills();
 
   bool hasHome();
+  Structure* getHomePtr();
 
  private:
   s_vitals vitals;

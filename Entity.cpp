@@ -477,3 +477,8 @@ bool Entity::hasHome()
       return true;
     }
 }
+
+Structure* Entity::getHomePtr()
+{
+  return home;
+}
