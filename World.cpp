@@ -94,6 +94,14 @@ bool World::consumeObject(Object* consumed)
     }
   return false;
 }
+
+Structure* World::addNewHome(int x, int y)
+{
+  Structure home;
+  home.placeObject(x,y);
+  structures.push_back(home);
+  return &structures.back();
+}
  
 void World::runFrame()
 {

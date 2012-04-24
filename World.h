@@ -56,6 +56,7 @@ class World
   void registerPlayer();
 
   bool consumeObject(Object* consumed);
+  Structure* addNewHome(int x, int y);
 
   void runFrame();
   void runFrameWithInput(SDL_Event* Event);
