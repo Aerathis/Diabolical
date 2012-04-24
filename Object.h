@@ -9,6 +9,8 @@ class Object
   {
     e_food,
     e_fire,
+    e_tree,
+    e_rock,
     e_structure
   };
 
