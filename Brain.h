@@ -9,7 +9,9 @@ enum e_brainState
     e_getFood,
     e_getWater,
     e_takeNap,
-    e_buildStuff
+    e_buildStuff,
+    e_buildHome,
+    e_makeHome
   };
 
 class Brain

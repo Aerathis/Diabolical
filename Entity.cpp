@@ -162,6 +162,18 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
 	  }
       }
       break;
+    case e_makeHome:
+      {       
+	resPointer->resultState = e_buildNewHome;
+	resPointer->target = NULL;
+      }
+      break;
+    case e_buildHome:
+      {
+	resPointer->resultState = e_buildStructure;
+	resPointer->target = (void*)home;
+      }
+      break;
     }
 }
 
@@ -282,6 +294,12 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	  {	    
 	    moveToTargetLocation(buildTarget->getObjVitals().x, buildTarget->getObjVitals().y);
 	  }
+      }
+      break;
+    case e_buildNewHome:
+      {
+	std::cout << "Building new home" << std::endl;
+	home = host->addNewHome(vitals.x, vitals.y);
       }
       break;
     default:

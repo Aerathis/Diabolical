@@ -6,9 +6,9 @@
 
 #include "Brain.h"
 #include "Map.h"
+#include "Structure.h"
 
 class World;
-class Structure;
 
 class Entity
 {
@@ -21,6 +21,7 @@ class Entity
     e_drinkWater,
     e_nap,
     e_buildStructure,
+    e_buildNewHome,
     e_idleFrame
   };
 

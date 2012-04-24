@@ -53,5 +53,19 @@ e_brainState Brain::runFrame(Entity* caller)
 
 e_brainState Brain::makeDecision(Entity* caller)
 {
-  return e_buildStuff;
+  if (caller->hasHome())
+    {
+      if (caller->getHomePtr()->isUnderConstruction() || !caller->getHomePtr()->isCompleted())
+	{
+	  return e_buildHome;
+	}
+      else
+	{
+	  return e_idle;
+	}
+    }
+  else
+    {
+      return e_makeHome;
+    }
 }
