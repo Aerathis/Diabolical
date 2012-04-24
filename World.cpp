@@ -145,7 +145,8 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      std::cout << std::endl;
 	      creators::fillTerrainDetails(&terrainMap, &worldMap);
 	      std::cout << std::endl;
-	      creators::fillWeather(worldWeather.getWeatherMap());
+	      creators::placeResources(&objects, &terrainMap);
+	      creators::fillWeather(worldWeather.getWeatherMap());	      
 	      worldCreated = true;
 	    }
 	  else if(worldCreated)

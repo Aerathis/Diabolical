@@ -155,4 +155,27 @@ namespace creators
 	std::cout << std::endl;
       }
   }
+
+  bool placeResources(std::vector<Object>* objects, Map<e_terrainType>* terrain)
+  {
+    int mapSize = terrain->getMapSize();
+    for (int y = 0 ; y < mapSize; y++)
+      {
+	for (int x = 0; x < mapSize; x++)
+	  {
+	    if (terrain->getLocationAtCoord(x,y) == e_mountain)
+	      {
+		Object stone;
+		stone.initObject(x,y,Object::e_rock);
+		objects->push_back(stone);
+	      }
+	    if (terrain->getLocationAtCoord(x,y) == e_grass)
+	      {
+		Object tree;
+		tree.initObject(x,y, Object::e_tree);
+		objects->push_back(tree);
+	      }
+	  }
+      }
+  }
 }
