@@ -15,11 +15,8 @@ Structure::Structure() : Object(Object::e_structure)
   materialReqs[e_wood] = 10;
   materialReqs[e_stone] = 1;
   totalMats = materialReqs[e_wood] + materialReqs[e_stone];
-  //materialsPresent[e_wood] = 0;
-  //materialsPresent[e_stone] = 0;
-  // Total debugging hack make sure to remove when testing is complete
-  materialsPresent[e_stone] = 1;
   materialsPresent[e_wood] = 0;
+  materialsPresent[e_stone] = 0;
 }
 
 void Structure::runFrame()
@@ -46,13 +43,48 @@ void Structure::runFrame()
 	      bool hasStone = (materialsPresent[e_stone] > 0 ? true : false);
 	      if (needWood && needStone)
 		{
-		  
+		  if(!hasWood)
+		    {
+		      materialsPresent[e_stone] -= 1;
+		      materialReqs[e_stone] -= 1;
+		      std::cout << "Used 1 stone in construction" << std::endl;
+		    }
+		  else
+		    {
+		      materialsPresent[e_wood] -= 1;
+		      materialReqs[e_wood] -= 1;
+		      std::cout << "Used 1 wood in construction" << std::endl;
+		    }
 		}
 	      else if (needWood && !needStone)
 		{
+		  if (hasWood)
+		    {
+		      materialsPresent[e_wood] -= 1;
+		      materialReqs[e_wood] -= 1;
+		      std::cout << "Used 1 wood in construction" << std::endl;
+		    }
+		  else
+		    {
+		      std::cout << "Construction Paused: Need wood" << std::endl;
+		      underConstruction = false;
+		      needMats = true;
+		    }
 		}
 	      else if (needStone && !needWood)
 		{
+		  if (hasStone)
+		    {
+		      materialsPresent[e_stone] -= 1;
+		      materialReqs[e_stone] -= 1;
+		      std::cout << "Used 1 stone in construction" << std::endl;
+		    }
+		  else
+		    {
+		      std::cout << "Construction Pause: Need stone" << std::endl;
+		      underConstruction = false;
+		      needMats = true;
+		    }
 		}
 	    }
 	}
