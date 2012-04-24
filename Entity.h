@@ -90,6 +90,7 @@ class Entity
   s_frameResolution priorFrameState;
 
   Structure* home;
+  Structure::e_materialType carryingResource;
 
   void processDecision(e_brainState decision, World* host, s_frameResolution* result);
   void resolveFrame(s_frameResolution* frState, World* host);

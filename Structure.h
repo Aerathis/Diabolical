@@ -20,7 +20,8 @@ class Structure : public Object
   enum e_materialType
   {
     e_wood,
-    e_stone
+    e_stone,
+    e_none
   };
 
   Structure();
