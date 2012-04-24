@@ -9,8 +9,14 @@ Structure::Structure() : Object(Object::e_structure)
   constructionTimeScale = 1;
   completed = false;
   underConstruction = false;
+  needMats = false;
   ownable = true;
   owner = NULL;
+  materialReqs[e_wood] = 10;
+  materialReqs[e_stone] = 1;
+  totalMats = materialReqs[e_wood] + materialReqs[e_stone];
+  materialsPresent[e_wood] = 0;
+  materialsPresent[e_stone] = 0;
 }
 
 void Structure::runFrame()
@@ -18,9 +24,73 @@ void Structure::runFrame()
   if (underConstruction)
     {
       completionPercent += 1 * constructionTimeScale;
-      if (completionPercent >= 10000)
+      int currentOutMats = materialReqs[e_wood] + materialReqs[e_stone];
+      int remainScale = totalMats - currentOutMats;
+      int perc = int((float)COMPLETE/(float)totalMats);      
+      if (completionPercent >= (perc * remainScale))
 	{
-	  completionPercent = 10000;
+	  if (materialsPresent[e_wood] == 0 && materialsPresent[e_stone] == 0)
+	    {
+	      std::cout << "Construction Paused: Need materials" << std::endl;
+	      underConstruction = false;
+	      needMats = true;
+	    }
+	  else
+	    {
+	      bool needWood = (materialReqs[e_wood] > 0 ? true : false);
+	      bool hasWood = (materialsPresent[e_wood] > 0 ? true : false);
+	      bool needStone = (materialReqs[e_stone] > 0 ? true : false);
+	      bool hasStone = (materialsPresent[e_stone] > 0 ? true : false);
+	      if (needWood && needStone)
+		{
+		  if(!hasWood)
+		    {
+		      materialsPresent[e_stone] -= 1;
+		      materialReqs[e_stone] -= 1;
+		      std::cout << "Used 1 stone in construction" << std::endl;
+		    }
+		  else
+		    {
+		      materialsPresent[e_wood] -= 1;
+		      materialReqs[e_wood] -= 1;
+		      std::cout << "Used 1 wood in construction" << std::endl;
+		    }
+		}
+	      else if (needWood && !needStone)
+		{
+		  if (hasWood)
+		    {
+		      materialsPresent[e_wood] -= 1;
+		      materialReqs[e_wood] -= 1;
+		      std::cout << "Used 1 wood in construction" << std::endl;
+		    }
+		  else
+		    {
+		      std::cout << "Construction Paused: Need wood" << std::endl;
+		      underConstruction = false;
+		      needMats = true;
+		    }
+		}
+	      else if (needStone && !needWood)
+		{
+		  if (hasStone)
+		    {
+		      materialsPresent[e_stone] -= 1;
+		      materialReqs[e_stone] -= 1;
+		      std::cout << "Used 1 stone in construction" << std::endl;
+		    }
+		  else
+		    {
+		      std::cout << "Construction Pause: Need stone" << std::endl;
+		      underConstruction = false;
+		      needMats = true;
+		    }
+		}
+	    }
+	}
+      if (completionPercent >= COMPLETE)
+	{
+	  completionPercent = COMPLETE;
 	  completed = true;
 	  underConstruction = false;
 	  std::cout << "Construction completed" << std::endl;
@@ -30,7 +100,7 @@ void Structure::runFrame()
 
 bool Structure::canStartWork()
 {
-  if (completed || underConstruction)
+  if (completed || underConstruction || needMats)
     {
       return false;
     }
