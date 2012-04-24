@@ -56,6 +56,7 @@ class World
   void registerPlayer();
 
   bool consumeObject(Object* consumed);
+  bool collectResource(Object* resource);
   Structure* addNewHome(int x, int y);
 
   void runFrame();

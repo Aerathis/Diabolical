@@ -95,6 +95,20 @@ bool World::consumeObject(Object* consumed)
   return false;
 }
 
+bool World::collectResource(Object* resource)
+{
+  std::vector<Object>::iterator it;
+  for (it = objects.begin(); it != objects.end(); ++it)
+    {
+      if (&*it == resource)
+	{
+	  objects.erase(it);
+	  return true;
+	}
+    }
+  return false;
+}
+
 Structure* World::addNewHome(int x, int y)
 {
   Structure home;
