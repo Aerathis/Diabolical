@@ -8,6 +8,7 @@
 #include "btBulletDynamicsCommon.h"
 
 #include "Creators.h"
+#include "DudeGroup.h"
 #include "Entity.h"
 #include "Map.h"
 #include "Object.h"
@@ -32,6 +33,7 @@ class World
   std::vector<Entity> citizens;
   std::vector<Object> objects;
   std::vector<Structure> structures;
+  std::vector<DudeGroup> organizations;
   Map<double> worldMap;
   Map<creators::e_terrainType> terrainMap;
   Weather worldWeather;
