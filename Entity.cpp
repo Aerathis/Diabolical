@@ -341,9 +341,33 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	      {
 		if (targetPos.x == vitals.x && targetPos.y == vitals.y)
 		  {
-		    hasTargetPosition = false;
-		    carryingResource = Structure::e_wood;
+		    std::vector<Object>::iterator it;
+		    for (it = host->getObjectList()->begin(); it != host->getObjectList()->end(); ++it)
+		      {
+			Object testObj = *it;
+			if (testObj.getObjVitals().x == vitals.x && testObj.getObjVitals().y == vitals.y)
+			  {
+			    if (testObj.pollObject() == Object::e_tree || testObj.pollObject() == Object::e_rock)
+			      {
+				carryingResource = (testObj.pollObject() == Object::e_tree ? Structure::e_wood : Structure::e_stone);			   
+				hasTargetPosition = false;
+			      }
+			  }
+		      }		  
 		  }
+	      }
+	  }
+	else
+	  {
+	    if (vitals.x == home->getObjVitals().x && vitals.y == home->getObjVitals().y)
+	      {
+		home->addMaterial(carryingResource);
+		carryingResource = Structure::e_none;
+		hasTargetPosition = false;	       
+	      }
+	    else
+	      {
+		moveToTargetLocation(home->getObjVitals().x, home->getObjVitals().y);
 	      }
 	  }
       }
