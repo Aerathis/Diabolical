@@ -1,5 +1,6 @@
 OBJ = Player.o Loader.o Model.o World.o Renderer.o Entity.o Weather.o \
-	  ../../../tools/xorshift.o Creators.o Object.o Brain.o Structure.o
+	  ../../../tools/xorshift.o Creators.o Object.o Brain.o Structure.o \
+	  DudeGroup.o
 
 linux : CApp
 
@@ -54,3 +55,6 @@ Brain.o : Brain.cpp Brain.h
 
 Structure.o : Structure.h Structure.cpp Object.h Object.cpp
 	g++ -c Structure.cpp
+
+DudeGroup.o : DudeGroup.h DudeGroup.cpp
+	g++ -c DudeGroup.cpp
