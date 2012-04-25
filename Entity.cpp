@@ -172,8 +172,16 @@ void Entity::processDecision(e_brainState decision, World* host, s_frameResoluti
       break;
     case e_buildHome:
       {
-	resPointer->resultState = e_buildStructure;
-	resPointer->target = (void*)home;
+	if (home->needsMats())
+	  {	   
+	    resPointer->resultState = e_collectStuff;
+	    resPointer->target = (void*)home;
+	  }
+	else
+	  {
+	    resPointer->resultState = e_buildStructure;
+	    resPointer->target = (void*)home;
+	  }
       }
       break;
     }
@@ -294,7 +302,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	  }
 	else
 	  {	    
-	    moveToTargetLocation(buildTarget->getObjVitals().x, buildTarget->getObjVitals().y);
+	    moveToTargetLocation(buildTarget->getObjVitals().x, buildTarget->getObjVitals().y);	    
 	  }
       }
       break;
@@ -302,6 +310,42 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
       {
 	std::cout << "Building new home" << std::endl;
 	home = host->addNewHome(vitals.x, vitals.y);
+      }
+      break;
+    case e_collectStuff:
+      {	
+	bool headingHome = (carryingResource == Structure::e_none ? false : true);
+	if (!headingHome)
+	  {
+	    std::map<Structure::e_materialType,int> matties = home->getRemainingReq();
+	    int numWoods = matties[Structure::e_wood];
+	    int numStones = matties[Structure::e_stone];
+	    if (!hasTargetPosition)
+	      {
+		if (numWoods > numStones)
+		  {
+		    std::cout << "Going to nearest wood" << std::endl;
+		    s_position temp = findNearestObjectOfType(host, Object::e_tree);
+		    moveToTargetLocation(temp.x,temp.y);
+		    hasTargetPosition = true;
+		  }
+		else
+		  {
+		    std::cout << "Going to nearest stone" << std::endl;
+		    s_position tempStone = findNearestObjectOfType(host, Object::e_rock);
+		    moveToTargetLocation(tempStone.x,tempStone.y);
+		    hasTargetPosition = true;
+		  }
+	      }
+	    else
+	      {
+		if (targetPos.x == vitals.x && targetPos.y == vitals.y)
+		  {
+		    hasTargetPosition = false;
+		    carryingResource = Structure::e_wood;
+		  }
+	      }
+	  }
       }
       break;
     default:
@@ -501,4 +545,28 @@ bool Entity::hasHome()
 Structure* Entity::getHomePtr()
 {
   return home;
+}
+
+Entity::s_position Entity::findNearestObjectOfType(World* host, Object::e_objectType checkType)
+{
+  s_position temp;
+  float nearDist = 10000000;
+  std::vector<Object>::iterator it;
+  for (it = host->getObjectList()->begin(); it != host->getObjectList()->end(); ++it)
+    {
+      Object obj = *it;
+      if (obj.pollObject() == checkType)
+	{
+	  float diffX = abs(obj.getObjVitals().x - vitals.x);
+	  float diffY = abs(obj.getObjVitals().y - vitals.y);
+	  float len = sqrt(diffX*diffX+diffY*diffY);
+	  if (len < nearDist)
+	    {
+	      nearDist = len;
+	      temp.x = obj.getObjVitals().x;
+	      temp.y = obj.getObjVitals().y;
+	    }
+	}
+    }
+  return temp;
 }

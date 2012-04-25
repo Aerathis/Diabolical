@@ -27,11 +27,11 @@ void Structure::runFrame()
       int currentOutMats = materialReqs[e_wood] + materialReqs[e_stone];
       int remainScale = totalMats - currentOutMats;
       int perc = int((float)COMPLETE/(float)totalMats);      
-      if (completionPercent >= (perc * remainScale))
+      if (completionPercent >= (perc * remainScale) && completionPercent != COMPLETE -1)
 	{
 	  if (materialsPresent[e_wood] == 0 && materialsPresent[e_stone] == 0)
 	    {
-	      std::cout << "Construction Paused: Need materials" << std::endl;
+	      std::cout << "Construction Paused: Need materials" << std::endl;	      
 	      underConstruction = false;
 	      needMats = true;
 	    }
@@ -47,13 +47,13 @@ void Structure::runFrame()
 		    {
 		      materialsPresent[e_stone] -= 1;
 		      materialReqs[e_stone] -= 1;
-		      std::cout << "Used 1 stone in construction" << std::endl;
+		      std::cout << "Used 1 stone in construction" << std::endl;		     
 		    }
 		  else
 		    {
 		      materialsPresent[e_wood] -= 1;
 		      materialReqs[e_wood] -= 1;
-		      std::cout << "Used 1 wood in construction" << std::endl;
+		      std::cout << "Used 1 wood in construction" << std::endl;		      
 		    }
 		}
 	      else if (needWood && !needStone)
@@ -62,7 +62,7 @@ void Structure::runFrame()
 		    {
 		      materialsPresent[e_wood] -= 1;
 		      materialReqs[e_wood] -= 1;
-		      std::cout << "Used 1 wood in construction" << std::endl;
+		      std::cout << "Used 1 wood in construction" << std::endl;		      
 		    }
 		  else
 		    {
@@ -77,7 +77,7 @@ void Structure::runFrame()
 		    {
 		      materialsPresent[e_stone] -= 1;
 		      materialReqs[e_stone] -= 1;
-		      std::cout << "Used 1 stone in construction" << std::endl;
+		      std::cout << "Used 1 stone in construction" << std::endl;		      
 		    }
 		  else
 		    {
@@ -88,7 +88,7 @@ void Structure::runFrame()
 		}
 	    }
 	}
-      if (completionPercent >= COMPLETE)
+      if (completionPercent >= COMPLETE - 1)
 	{
 	  completionPercent = COMPLETE;
 	  completed = true;
@@ -139,6 +139,11 @@ bool Structure::canHaveOwner()
     }
 }
 
+bool Structure::needsMats()
+{
+  return needMats;
+}
+
 void Structure::changeOwner(Entity* newOwner)
 {
   owner = newOwner;
@@ -186,5 +191,22 @@ void Structure::pauseConstruction()
   else
     {
       std::cout << "Can't pause construction: Object not currently under construction" << std::endl;
+    }
+}
+
+std::map<Structure::e_materialType,int> Structure::getRemainingReq()
+{
+  std::map<e_materialType,int> remain;
+  remain[e_wood] = materialReqs[e_wood] - materialsPresent[e_wood];
+  remain[e_stone] = materialReqs[e_stone] - materialsPresent[e_stone];
+  return remain;
+}
+
+void Structure::addMaterial(e_materialType resource)
+{
+  materialsPresent[resource] += 1;
+  if (materialsPresent[e_wood] == materialReqs[e_wood] && materialsPresent[e_stone] == materialReqs[e_stone])
+    {
+      needMats = false;
     }
 }

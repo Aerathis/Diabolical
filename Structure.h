@@ -31,10 +31,13 @@ class Structure : public Object
   bool isUnderConstruction();
   bool isCompleted();
   bool canHaveOwner();
+  bool needsMats();
   void changeOwner(Entity* newOwner);
   void startConstruction();
   void pauseConstruction();
-
+  std::map<e_materialType,int> getRemainingReq();
+  void addMaterial(e_materialType res);
+  
   void structureReport();
 
  private:

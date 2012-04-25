@@ -22,6 +22,7 @@ class Entity
     e_nap,
     e_buildStructure,
     e_buildNewHome,
+    e_collectStuff,
     e_idleFrame
   };
 
@@ -82,6 +83,7 @@ class Entity
 
   bool alive;
   bool nightyBye;
+  bool hasTargetPosition;
   s_position targetPos;
   Entity* target;
   Brain smarts;
@@ -94,6 +96,8 @@ class Entity
 
   void processDecision(e_brainState decision, World* host, s_frameResolution* result);
   void resolveFrame(s_frameResolution* frState, World* host);
+
+  s_position findNearestObjectOfType(World* host, Object::e_objectType checkType);
 };
 
 #endif //ENTITY_H
