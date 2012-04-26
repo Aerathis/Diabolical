@@ -322,7 +322,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	    int numStones = matties[Structure::e_stone];
 	    if (!hasTargetPosition)
 	      {
-		if (numWoods > numStones)
+		if (numWoods >= numStones)
 		  {
 		    std::cout << "Going to nearest wood" << std::endl;
 		    s_position temp = findNearestObjectOfType(host, Object::e_tree);
