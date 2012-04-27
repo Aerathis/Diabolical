@@ -9,8 +9,11 @@ class DudeGroup
 {
  public:
 
+  DudeGroup();
+  
   bool requestEntry(Entity* supplicant);
   void addToGroup(Entity* supplicant);
+  void removeFromGroup(Entity* trouble);
 
  private:
   std::vector<Entity*> members;
