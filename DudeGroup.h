@@ -2,6 +2,7 @@
 #define _DUDEGROUP_H
 
 #include <vector>
+#include <list>
 
 #include "Entity.h"
 
@@ -16,7 +17,13 @@ class DudeGroup
   void removeFromGroup(Entity* trouble);
 
  private:
+
+  enum e_ruleType
+  {   
+  };
+
   std::vector<Entity*> members;
+  std::list<e_ruleType> rules;
 };
 
 #endif //DUDEGROUP_H

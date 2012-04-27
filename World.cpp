@@ -252,11 +252,18 @@ void World::runFrameWithInput(SDL_Event* Event)
 	}
       else if (Event->key.keysym.sym == SDLK_r)
 	{
-	  std::vector<Structure>::iterator it;
-	  for (it = structures.begin(); it != structures.end(); ++it)
+	  if (selected)
+	    {	   
+	      organizations[0].removeFromGroup(selected);
+	    }
+	  else
 	    {
-	      Structure temp = *it;
-	      temp.structureReport();
+	      std::vector<Structure>::iterator it;
+	      for (it = structures.begin(); it != structures.end(); ++it)
+		{
+		  Structure temp = *it;
+		  temp.structureReport();
+		}
 	    }
 	}
       else if (Event->key.keysym.sym == SDLK_o)
@@ -271,7 +278,10 @@ void World::runFrameWithInput(SDL_Event* Event)
 	{
 	  if (selected)
 	    {
-	      organizations[0].addToGroup(selected);
+	      if (organizations[0].requestEntry(selected))
+		  {
+		    organizations[0].addToGroup(selected);
+		  }		  	    
 	    }
 	  else
 	    {
