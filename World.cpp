@@ -267,6 +267,18 @@ void World::runFrameWithInput(SDL_Event* Event)
 	{
 	  createNewFire();
 	}
+      else if (Event->key.keysym.sym == SDLK_g)
+	{
+	  if (selected)
+	    {
+	      organizations[0].addToGroup(selected);
+	    }
+	  else
+	    {
+	      DudeGroup newGroup;
+	      organizations.push_back(newGroup);
+	    }
+	}
     }
   // Finally run the standard frame
   runFrame();
