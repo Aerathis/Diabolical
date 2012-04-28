@@ -377,6 +377,26 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
     }
 }
 
+Brain::s_brainBox Entity::packBrainBox(World* host)
+{
+  Brain::s_brainBox packed;
+  packed.survival.hunger = stats.hunger;
+  packed.survival.thirst = stats.thirst;
+  packed.survival.tired = stats.tired;
+  packed.hasHome = hasHome();
+  if (hasHome())
+    {
+      packed.homeBuilt = (getHomePtr()->isUnderConstruction() || !getHomePtr()->isCompleted());
+    }
+  else
+    {
+      packed.homeBuilt = false;
+    }
+  packed.xPos = vitals.x;
+  packed.yPos = vitals.y;
+  return packed;
+}
+
 void Entity::runFrame(World* host)
 {
   // Check to see if the character is alive at all, if not no need to do anything else
@@ -385,7 +405,8 @@ void Entity::runFrame(World* host)
       frameState.resultState = e_idleFrame;
       frameState.target = 0;
       // Runs the decision making and then processes that decision to select a course of action
-      processDecision(smarts.runFrame(this), host, &frameState);      
+      Brain::s_brainBox situation = packBrainBox(host);
+      processDecision(smarts.runFrame(situation), host, &frameState);      
       if (frameState.resultState != priorFrameState.resultState)
 	{
 	  std::cout << "resultState changed between frames" << std::endl;

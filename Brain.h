@@ -21,14 +21,42 @@ class Brain
   // Interesting thought processes. 
 
  public:
+  
+  struct s_survival
+  {
+    int hunger;
+    int thirst;
+    int tired;
+  };
+
+  struct s_brainBox
+  {
+    s_survival survival;
+    bool hasHome;
+    bool homeBuilt;
+    int xPos;
+    int yPos;
+  };
+
   Brain();
   ~Brain();
 
-  e_brainState runFrame(Entity* caller);
+  e_brainState runFrame(s_brainBox situation);
 
  private:
+
+  struct s_decisionFactors
+  {
+    s_survival survival;
+    int work;
+    int entertainment;
+  };
+
   e_brainState currentState;
-  e_brainState makeDecision(Entity* caller);
+  s_decisionFactors currentSituation;
+
+  e_brainState makeDecision(s_brainBox situation);
+  int evaluateWork(s_brainBox situation);
 };
 
 #endif //BRAIN_H

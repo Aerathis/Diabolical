@@ -96,6 +96,7 @@ class Entity
 
   void processDecision(e_brainState decision, World* host, s_frameResolution* result);
   void resolveFrame(s_frameResolution* frState, World* host);
+  Brain::s_brainBox packBrainBox(World* host);
 
   s_position findNearestObjectOfType(World* host, Object::e_objectType checkType);
 };
