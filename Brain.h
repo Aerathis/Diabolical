@@ -48,7 +48,7 @@ class Brain
 
   struct s_decisionFactors
   {
-    s_survival survival;
+    int survival;
     int work;
     int entertainment;
   };
@@ -57,6 +57,7 @@ class Brain
   s_decisionFactors currentSituation;
 
   e_brainState makeDecision(s_brainBox situation);
+  int evaluateSurvival(s_brainBox situation);
   int evaluateWork(s_brainBox situation);
 };
 

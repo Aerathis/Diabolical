@@ -5,15 +5,21 @@
 
 Brain::Brain()
 {
-  currentSituation.survival.hunger = 0;
-  currentSituation.survival.thirst = 0;
-  currentSituation.survival.tired = 0;
+  currentSituation.survival = 0;
   currentSituation.work = 0;
   currentSituation.entertainment = 0;
 }
 
 Brain::~Brain()
 {
+}
+
+int Brain::evaluateSurvival(Brain::s_brainBox situation)
+{
+  int food = situation.survival.hunger;
+  int water = situation.survival.thirst;
+  int sleepy = situation.survival.tired;
+  return food+water+sleepy;
 }
 
 int Brain::evaluateWork(Brain::s_brainBox situation)
@@ -26,32 +32,23 @@ int Brain::evaluateWork(Brain::s_brainBox situation)
 e_brainState Brain::runFrame(Brain::s_brainBox situation)
 {
 
-  int hunger = situation.survival.hunger;
-  int thirst = situation.survival.thirst;
-  int tired = situation.survival.tired;
-  int survivalNeeds = 0;
-  
-  currentSituation.survival.hunger = hunger;
-  currentSituation.survival.thirst = thirst;
-  currentSituation.survival.tired = tired;
-
-  survivalNeeds = hunger + thirst + tired;
+  currentSituation.survival = evaluateSurvival(situation);
   currentSituation.work = evaluateWork(situation);
   currentSituation.entertainment = 0;
 
   e_brainState newState = currentState;
 
-  if (survivalNeeds >= currentSituation.work)
+  if ( currentSituation.survival >= currentSituation.work)
     {     
-      if (tired < 370)
+      if (situation.survival.tired < 370)
 	newState = e_idle;
-      if (thirst > 500)
+      if (situation.survival.thirst > 500)
 	newState = e_getWater;
-      if (hunger > 500)
+      if (situation.survival.hunger > 500)
 	newState = e_getFood;
-      if (thirst < 500 && hunger < 500)
+      if (situation.survival.thirst < 500 && situation.survival.hunger < 500)
 	newState = e_idle;
-      if (tired > 800)
+      if (situation.survival.tired > 800)
 	newState = e_takeNap;     
     }
   else
