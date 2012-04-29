@@ -16,6 +16,13 @@ Brain::~Brain()
 {
 }
 
+int Brain::evaluateWork(Brain::s_brainBox situation)
+{
+  int needHome = (situation.hasHome ? 0 : 1500);
+  int buildHome = (situation.homeBuilt ? 0 : 1000);
+  return needHome + buildHome;
+}
+
 e_brainState Brain::runFrame(Brain::s_brainBox situation)
 {
 
@@ -29,13 +36,13 @@ e_brainState Brain::runFrame(Brain::s_brainBox situation)
   currentSituation.survival.tired = tired;
 
   survivalNeeds = hunger + thirst + tired;
-  currentSituation.work = 0;
+  currentSituation.work = evaluateWork(situation);
   currentSituation.entertainment = 0;
 
   e_brainState newState = currentState;
 
   if (survivalNeeds >= currentSituation.work)
-    {
+    {     
       if (tired < 370)
 	newState = e_idle;
       if (thirst > 500)
@@ -47,7 +54,7 @@ e_brainState Brain::runFrame(Brain::s_brainBox situation)
       if (tired > 800)
 	newState = e_takeNap;     
     }
-  if (newState == e_idle)
+  else
     {      
       newState = makeDecision(situation);
     }
@@ -66,7 +73,7 @@ e_brainState Brain::makeDecision(s_brainBox situation)
 {
   if (situation.hasHome)
     {
-      if (situation.homeBuilt)
+      if (!situation.homeBuilt || situation.homeBuilding)
 	{
 	  return e_buildHome;
 	}

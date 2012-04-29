@@ -386,7 +386,8 @@ Brain::s_brainBox Entity::packBrainBox(World* host)
   packed.hasHome = hasHome();
   if (hasHome())
     {
-      packed.homeBuilt = (getHomePtr()->isUnderConstruction() || !getHomePtr()->isCompleted());
+      packed.homeBuilt = getHomePtr()->isCompleted();
+      packed.homeBuilding = getHomePtr()->isUnderConstruction();
     }
   else
     {

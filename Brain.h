@@ -34,6 +34,7 @@ class Brain
     s_survival survival;
     bool hasHome;
     bool homeBuilt;
+    bool homeBuilding;
     int xPos;
     int yPos;
   };
