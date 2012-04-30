@@ -1,6 +1,8 @@
 #ifndef _BRAIN_H
 #define _BRAIN_H
 
+#include <list>
+
 class Entity;
 
 enum e_brainState
@@ -37,6 +39,7 @@ class Brain
     bool homeBuilding;
     int xPos;
     int yPos;
+    std::list<e_brainState> exclusions;
   };
 
   Brain();
@@ -59,6 +62,8 @@ class Brain
   e_brainState makeDecision(s_brainBox situation);
   int evaluateSurvival(s_brainBox situation);
   int evaluateWork(s_brainBox situation);
+
+  bool listContains(std::list<e_brainState> inList, e_brainState checkFor);
 };
 
 #endif //BRAIN_H

@@ -55,6 +55,14 @@ e_brainState Brain::runFrame(Brain::s_brainBox situation)
     {      
       newState = makeDecision(situation);
     }
+
+  if (situation.exclusions.size() != 0)
+    {
+      if (listContains(situation.exclusions,newState))
+	{
+	  newState = e_idle;
+	}
+    }
   // If the brain has changed its mind since the last time it made a decision
   // it announces that change and applies it to the current decision
   if (newState != currentState)
@@ -83,4 +91,19 @@ e_brainState Brain::makeDecision(s_brainBox situation)
     {
       return e_makeHome;
     }
+}
+
+bool Brain::listContains(std::list<e_brainState> inList, e_brainState checkFor)
+{
+  bool results = false;
+  std::list<e_brainState>::iterator it;
+  for (it = inList.begin(); it != inList.end(); ++it)
+    {
+      if (*it == checkFor)
+	{
+	  results = true;
+	}
+    }
+
+  return results;
 }
