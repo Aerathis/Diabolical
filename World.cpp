@@ -148,7 +148,8 @@ void World::runFrameWithInput(Event* Event)
 	      std::cout << "Position: (";
 	      std::cout << selected->getVitals().x << "," << selected->getVitals().y << ")";
 	      std::cout << " Time Alive: " << selected->getVitals().timeAlive;
-	      std::cout << " Hungry: " << selected->getStats().hunger << std::endl;
+	      std::cout << " Hungry: " << selected->getStats().hunger;
+	      std::cout << " Tired: " << selected->getStats().tired << std::endl;
 	    }
 	  else
 	    {

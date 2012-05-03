@@ -25,7 +25,7 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   stats.hunger = 0;
   stats.thirst = 0;
   stats.tired = 0;
-  stats.moveSpeed = 5000;
+  stats.moveSpeed = 500;
 
   alive = true;
   nightyBye = false;
@@ -209,7 +209,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	  }
 	else
 	  {
-	    if (stats.hunger > 250)
+	    if (stats.hunger > 800)
 	      {
 		nightyBye = false;
 		std::cout << "Waking up: Extremely hungry" << std::endl;
@@ -234,7 +234,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	  }
 	else
 	  {
-	    if (stats.thirst > 70)
+	    if (stats.thirst > 800)
 	      {
 		nightyBye = false;
 		std::cout << "Waking up: Extremely thirsty" << std::endl;
@@ -265,7 +265,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 		  }
 	      }
 	  }
-	if (nightyBye)
+	else if (nightyBye)
 	  {
 	    if (stats.thirst > 800)
 	      {
@@ -289,6 +289,7 @@ void Entity::resolveFrame(s_frameResolution* resultState, World* host)
 	      }
 	  }
       }
+      break;
     case e_buildStructure:
       {
 	Structure* buildTarget = (Structure*)resultState->target;       
@@ -428,7 +429,7 @@ void Entity::runFrame(World* host)
 	}
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
-      if (vitals.timeAlive % 150000 == 0)
+      if (vitals.timeAlive % 15000 == 0)
 	{
 	  // The hunger section
 	  stats.hunger += 5;
@@ -489,7 +490,7 @@ void Entity::runFrame(World* host)
 	    stats.tired -= 50;
 	  else
 	    stats.tired += 1;
-	  if (nightyBye && stats.tired == 0)
+	  if (nightyBye && stats.tired <= 0)
 	    {
 	      std::cout << "Waking up" << std::endl;
 	      nightyBye = false;
