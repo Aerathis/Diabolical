@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <math.h>
 
 #include "Brain.h"
 #include "Map.h"

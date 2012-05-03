@@ -1,4 +1,4 @@
-OBJ = Player.o Loader.o Model.o World.o Renderer.o Entity.o Weather.o \
+OBJ = Diabolical.o Model.o World.o Entity.o Weather.o \
 	  ../../../tools/xorshift.o Creators.o Object.o Brain.o Structure.o \
 	  DudeGroup.o
 
@@ -7,18 +7,11 @@ linux : CApp
 clean :
 	rm *.o
 
-profile : CApp
-	g++ -o CApp -I ../../../ExternalLibs/bullet/src -I ../../../ExternalLibs/SDL CApp.cpp $(OBJ) -L ../../../ExternalLibs/bullet/src/.libs/libBulletDynamics.a -L ../../../ExternalLibs/bullet/src/.libs/libBulletCollision.a -L ../../../ExternalLibs/bullet/src/.libs/libLinearMath.a `sdl-config --cflags --libs` -lGL -lBulletDynamics -lBulletCollision -lLinearMath -ltinyxml -pg
+Main : main.cpp main.h Input.h Map.h $(OBJ)
+	g++ -o Main main.cpp $(OBJ) -lGL -lX11
 
-CApp : CApp.h CApp.cpp Map.h $(OBJ) 
-	g++ -o CApp -I ../../../ExternalLibs/bullet/src -I ../../../ExternalLibs/SDL CApp.cpp $(OBJ) -L ../../../ExternalLibs/bullet/src/.libs/libBulletDynamics.a -L ../../../ExternalLibs/bullet/src/.libs/libBulletCollision.a -L ../../../ExternalLibs/bullet/src/.libs/libLinearMath.a `sdl-config --cflags --libs` -lGL -lBulletDynamics -lBulletCollision -lLinearMath -ltinyxml
-
-CApp.exe : CApp.h CApp.cpp Player.o
-	g++ -o CApp.exe -I ../../../ExternalLibs/bullet/src -I ../../../ExternalLibs/SDL \
-	CApp.cpp ../../../ExternalLibs/bullet/src/.libs/libBulletDynamics.a \
-	../../../ExternalLibs/bullet/src/.libs/libBulletCollision.a \
-	../../../ExternalLibs/bullet/src/.libs/libLinearMath.a `sdl-config --cflags --libs` \
-	-lopengl32
+Diabolical.o : Diabolical.cpp Diabolical.h
+	g++ -c Diabolical.cpp
 
 Player.o : Player.cpp Player.h
 	g++ -c -I ../../../ExternalLibs/bullet/src Player.cpp

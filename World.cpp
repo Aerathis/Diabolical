@@ -3,25 +3,12 @@
 World::World()
 {
   // Normal constructor business. Nulling things out and all that.
-  collisionConfiguration = NULL;
-  dispatcher = NULL;
-  overlappingPairCache = NULL;
-  solver = NULL;
-  dynamicsWorld = NULL;
-  player = new Player();
   worldCreated = false;
 }
 
 void World::initWorld()
 {
   // Initializing the world parameters, at the moment there's no method to use anything but these defaults. 
-  collisionConfiguration = new btDefaultCollisionConfiguration();
-  dispatcher = new btCollisionDispatcher(collisionConfiguration);
-  overlappingPairCache = new btDbvtBroadphase();
-  solver = new btSequentialImpulseConstraintSolver;
-  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver,
-					      collisionConfiguration);
-  dynamicsWorld->setGravity(btVector3(0,-10,0));
 
   worldMap.setSize(0);
   terrainMap.setSize(0);
@@ -30,26 +17,6 @@ void World::initWorld()
   srand(time(NULL));
 
   selected = NULL;
-}
-
-btDiscreteDynamicsWorld* World::getWorld()
-{
-  return dynamicsWorld;
-}
-
-void World::registerPlayer()
-{
-  // Get the player set up in the world. (Even though I don't use the rigid body for anything).
-  player->initPlayer();
-  std::cout << "Beginning registerPlayer" << std::endl;
-  dynamicsWorld->addRigidBody(player->getPlayerRigidBody());
-  std::cout << "Rigid body added to world" << std::endl;
-}
-
-// Returns the player pointer which I don't really use at all at this point
-Player* World::getPlayerPtr()
-{
-  return player;
 }
 
 // Returns a pointer to the weatherMap, which shouldn't be modified outside of this file
@@ -122,7 +89,7 @@ void World::runFrame()
   
   // The update function, this is going to be run when there's no input
   //worldWeather.runFrame();
-  if (rand()%10000 == 1)
+  if (rand()%10000000 == 1)
     {
       createNewFood();
     }
@@ -138,17 +105,17 @@ void World::runFrame()
     }
 }
 
-void World::runFrameWithInput(SDL_Event* Event)
+void World::runFrameWithInput(Event* Event)
 {
   // The other update function, this is going to be run when there is input. 
   // If the event is a click on a unit or structure then we set it as the selected entity
 
   // Most of the code in this function is pretty much solely for testing purposes
   // Actual input will be handled in a much more sane fashion in a separate location
-  if (Event->type == SDL_KEYDOWN)
+  if (Event->type == input::e_keyEvent)
     {
       // Handle when the "C" key is pressed
-      if(Event->key.keysym.sym==SDLK_c)
+      if(Event->key == DKeysym::DK_Key_c)
 	{
 	  if (!worldCreated)
 	    {
@@ -173,7 +140,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       // Handle when the "P" key is pressed
-      else if (Event->key.keysym.sym == SDLK_p)
+      else if (Event->key == DKeysym::DK_Key_p)
 	{
 	  if (selected)
 	    {
@@ -193,7 +160,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       // Handle when the "S" key is pressed
-      else if (Event->key.keysym.sym == SDLK_s)
+      else if (Event->key == DKeysym::DK_Key_s)
 	{
 	  if (selected)
 	    {
@@ -210,7 +177,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       // Handle when the "1" key is pressed
-      else if (Event->key.keysym.sym == SDLK_1)
+      else if (Event->key == DKeysym::DK_Key_1)
 	{
 	  if (citizens.size() >= 1 && selected != &citizens[0])
 	    {
@@ -219,7 +186,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       // Handle when the "2" key is pressed
-      else if (Event->key.keysym.sym == SDLK_2)
+      else if (Event->key == DKeysym::DK_Key_2)
 	{
 	  if (citizens.size() >= 2 && selected != &citizens[1])
 	    {
@@ -228,12 +195,12 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       // Handle when the "W" key is pressed
-      else if (Event->key.keysym.sym == SDLK_w)
+      else if (Event->key == DKeysym::DK_Key_w)
 	{
 	  worldWeather.getWeatherMap()->setLocationAtCoord(0,0,33);
 	}
       // Handle when the "T" key is pressed
-      else if (Event->key.keysym.sym == SDLK_t)
+      else if (Event->key == DKeysym::DK_Key_t)
 	{
 	  if (selected != &citizens[1])
 	    {
@@ -242,7 +209,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	    }
 	}
       // Handle when the "M" key is pressed
-      else if (Event->key.keysym.sym == SDLK_m)
+      else if (Event->key == DKeysym::DK_Key_m)
 	{
 	  if (structures.size() > 0)
 	    {
@@ -250,7 +217,7 @@ void World::runFrameWithInput(SDL_Event* Event)
 	      structures[0].startConstruction();	      
 	    }
 	}
-      else if (Event->key.keysym.sym == SDLK_r)
+      else if (Event->key == DKeysym::DK_Key_r)
 	{
 	  if (selected)
 	    {	   
@@ -266,15 +233,15 @@ void World::runFrameWithInput(SDL_Event* Event)
 		}
 	    }
 	}
-      else if (Event->key.keysym.sym == SDLK_o)
+      else if (Event->key == DKeysym::DK_Key_o)
 	{	 
 	  createNewFood();
 	}
-      else if (Event->key.keysym.sym == SDLK_f)
+      else if (Event->key == DKeysym::DK_Key_f)
 	{
 	  createNewFire();
 	}
-      else if (Event->key.keysym.sym == SDLK_g)
+      else if (Event->key == DKeysym::DK_Key_g)
 	{
 	  if (selected)
 	    {
