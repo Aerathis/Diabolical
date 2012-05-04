@@ -243,6 +243,8 @@ int main(int argc, char** argv)
   int swapFlag = True;
   bool running = true;
 
+  clock_t gameClock;
+
   /* Open the connection to the X server */
   dpy = XOpenDisplay(NULL);
   if (dpy == NULL)
@@ -286,18 +288,24 @@ int main(int argc, char** argv)
   
   XSelectInput(dpy, xWin, InputOutput | PointerMotionMask | ButtonPressMask | ButtonReleaseMask);
 
-  EventContainer container(dpy);
-
-  //glEnable(GL_TEXTURE_2D);
-  //sleep(10);
-  
+  EventContainer container(dpy);  
+  struct timespec ts;
+  int timeInter = 0;
+  int prevTime = 0;
   while (application.isRunning())
-    {
-      if (XPending(dpy))
-	{
-	  application.addEvent(container.pollEvent());
-	}      
-      application.onExecute();
+    {      
+      clock_gettime(CLOCK_REALTIME,&ts);      
+      timeInter = ts.tv_nsec/1000000;
+      if (timeInter % 100 == 0 && timeInter / 100 != prevTime)
+	{	
+	  prevTime = timeInter / 100;
+
+	  if (XPending(dpy))
+	    {
+	      application.addEvent(container.pollEvent());
+	    }
+	  application.onExecute();
+	}
     }
   exit(EXIT_SUCCESS);
 

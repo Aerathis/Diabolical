@@ -25,7 +25,7 @@ void Entity::initEntity(int inX, int inY, int inId, std::string inName)
   stats.hunger = 0;
   stats.thirst = 0;
   stats.tired = 0;
-  stats.moveSpeed = 500;
+  stats.moveSpeed = 5;
 
   alive = true;
   nightyBye = false;
@@ -429,7 +429,7 @@ void Entity::runFrame(World* host)
 	}
       // Doing the various vital statistics updating first
       vitals.timeAlive += 1;
-      if (vitals.timeAlive % 15000 == 0)
+      if (vitals.timeAlive % 1 == 0)
 	{
 	  // The hunger section
 	  stats.hunger += 5;
@@ -545,7 +545,7 @@ void Entity::runFrame(World* host)
 	  alive = false;
 	}
 
-      if (vitals.timeAlive % 150000 == 0)
+      if (vitals.timeAlive % 1 == 0)
 	resolveFrame(&frameState, host);
       priorFrameState = frameState;
     }

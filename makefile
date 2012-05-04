@@ -8,7 +8,7 @@ clean :
 	rm *.o
 
 Main : main.cpp main.h Input.h Map.h $(OBJ)
-	g++ -o Main main.cpp $(OBJ) -lGL -lX11
+	g++ -o Main main.cpp $(OBJ) -lGL -lX11 -lrt
 
 Diabolical.o : Diabolical.cpp Diabolical.h
 	g++ -c Diabolical.cpp
