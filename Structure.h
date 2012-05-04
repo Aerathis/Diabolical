@@ -1,7 +1,7 @@
 #ifndef _STRUCTURE_H
 #define _STRUCTURE_H
 
-#define COMPLETE 10000
+#define COMPLETE 1000
 
 #include <map>
 

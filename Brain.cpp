@@ -38,6 +38,8 @@ e_brainState Brain::runFrame(Brain::s_brainBox situation)
 
   e_brainState newState = currentState;
 
+  //std::cout << "Surival rating: " << currentSituation.survival << std::endl;
+  //std::cout << "Work rating: " << currentSituation.work << std::endl;
   if ( currentSituation.survival >= currentSituation.work)
     {     
       if (situation.survival.tired < 370)

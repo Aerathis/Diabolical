@@ -432,7 +432,7 @@ void Entity::runFrame(World* host)
       if (vitals.timeAlive % 1 == 0)
 	{
 	  // The hunger section
-	  stats.hunger += 5;
+	  stats.hunger += 1;
 	  if (stats.hunger == 500)
 	    {
 	      std::cout << "Getting hungry" << std::endl;
@@ -447,7 +447,7 @@ void Entity::runFrame(World* host)
 	    }
 
 	  // The thirsty section
-	  stats.thirst += 10;
+	  stats.thirst += 1;
 	  if (stats.thirst == 750)
 	    {
 	      std::cout << "Is extremely thirsty" << std::endl;
