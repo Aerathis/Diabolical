@@ -6,6 +6,9 @@
 class Renderer
 {
 
+ public:
+  static void renderTest();
+
 };
 
 #endif //RENDERER_H

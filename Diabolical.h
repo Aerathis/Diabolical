@@ -4,6 +4,7 @@
 #include <queue>
 
 #include "Input.h"
+#include "Renderer.h"
 #include "World.h"
 
 typedef input::s_DEvent Event;
@@ -13,6 +14,7 @@ class Diabolical
  private:
   bool running;
   World gameWorld;
+  Renderer renderer;
   std::deque<Event> eventQueue;
 
  public:
