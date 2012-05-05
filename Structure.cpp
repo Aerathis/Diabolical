@@ -28,10 +28,14 @@ void Structure::runFrame()
       int remainScale = totalMats - currentOutMats;
       int perc = int((float)COMPLETE/(float)totalMats);      
       if (completionPercent >= (perc * remainScale) && completionPercent != COMPLETE -1)
-	{
-	  if (materialsPresent[e_wood] == 0 && materialsPresent[e_stone] == 0)
+	{	  
+	  if (materialsPresent[e_wood] == 0 && materialsPresent[e_stone] == 0 && 
+	      remainScale != totalMats)
 	    {
-	      std::cout << "Construction Paused: Need materials" << std::endl;	      
+	      std::cout << "Construction Paused: Need materials" << std::endl;
+	      std::cout << completionPercent << std::endl;
+	      std::cout << perc << std::endl;
+	      std::cout << remainScale << std::endl;
 	      underConstruction = false;
 	      needMats = true;
 	    }
@@ -47,13 +51,14 @@ void Structure::runFrame()
 		    {
 		      materialsPresent[e_stone] -= 1;
 		      materialReqs[e_stone] -= 1;
-		      std::cout << "Used 1 stone in construction" << std::endl;		     
+		      std::cout << "Used 1 stone in construction" << std::endl;		      
 		    }
 		  else
 		    {
 		      materialsPresent[e_wood] -= 1;
 		      materialReqs[e_wood] -= 1;
-		      std::cout << "Used 1 wood in construction" << std::endl;		      
+		      std::cout << "Used 1 wood in construction" << std::endl;
+		      std::cout << materialReqs[e_wood] << std::endl;
 		    }
 		}
 	      else if (needWood && !needStone)
@@ -62,7 +67,8 @@ void Structure::runFrame()
 		    {
 		      materialsPresent[e_wood] -= 1;
 		      materialReqs[e_wood] -= 1;
-		      std::cout << "Used 1 wood in construction" << std::endl;		      
+		      std::cout << "Used 1 wood in construction" << std::endl;
+		      std::cout << materialReqs[e_wood] << std::endl;
 		    }
 		  else
 		    {
@@ -77,7 +83,8 @@ void Structure::runFrame()
 		    {
 		      materialsPresent[e_stone] -= 1;
 		      materialReqs[e_stone] -= 1;
-		      std::cout << "Used 1 stone in construction" << std::endl;		      
+		      std::cout << "Used 1 stone in construction" << std::endl;
+		      std::cout << materialReqs[e_stone] << std::endl;
 		    }
 		  else
 		    {
