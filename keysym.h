@@ -5,6 +5,7 @@ namespace DKeysym
 {
   enum e_DKeysym
   {
+    DK_nokey,
     DK_Escape,
     DK_Key_a,
     DK_Key_b,

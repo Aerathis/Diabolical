@@ -190,6 +190,8 @@ public :
 	  case KeyRelease:
 	    break;
 	  case MotionNotify:
+	    result.type = input::e_mouseEvent;
+	    result.key = DKeysym::DK_nokey;
 	    break;
 	  case ButtonPress:
 	    break;

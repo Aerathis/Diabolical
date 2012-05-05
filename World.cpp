@@ -258,6 +258,10 @@ void World::runFrameWithInput(Event* Event)
 	    }
 	}
     }
+  else if (Event->type = input::e_mouseEvent)
+    {
+      std::cout << "Mouse test" << std::endl;
+    }
   // Finally run the standard frame
   runFrame();
 }
