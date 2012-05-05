@@ -31,6 +31,11 @@ bool Diabolical::onEvent(Event event)
   return true;
 }
 
+void Diabolical::onRender()
+{
+  renderer.renderTest();
+}
+
 void Diabolical::onExecute()
 {           
   while (!eventQueue.empty())
@@ -38,5 +43,6 @@ void Diabolical::onExecute()
       onEvent(eventQueue.front());
       eventQueue.pop_front();
     }
-  onLoop();          
+  onLoop();
+  onRender();
 }

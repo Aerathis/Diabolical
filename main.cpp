@@ -307,8 +307,8 @@ int main(int argc, char** argv)
 	      application.addEvent(container.pollEvent());
 	    }
 	  application.onExecute();
+	  glXSwapBuffers(dpy,glxWin);
 	}
     }
   exit(EXIT_SUCCESS);
-
 }

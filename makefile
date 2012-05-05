@@ -1,4 +1,4 @@
-OBJ = Diabolical.o Model.o World.o Entity.o Weather.o \
+OBJ = Diabolical.o Model.o World.o Entity.o Weather.o Renderer.o \
 	  ../../../tools/xorshift.o Creators.o Object.o Brain.o Structure.o \
 	  DudeGroup.o
 
@@ -26,7 +26,7 @@ World.o : World.cpp World.h
 	g++ -c -I ../../../ExternalLibs/bullet/src World.cpp
 
 Renderer.o : Renderer.cpp Renderer.h
-	g++ -c -I ../../../ExternalLibs/SDL -I ../../../ExternalLibs/bullet/src Renderer.cpp
+	g++ -c Renderer.cpp
 
 Entity.o : Entity.h Entity.cpp Brain.o
 	g++ -c -I ../../../ExternalLibs/bullet/src Entity.cpp
