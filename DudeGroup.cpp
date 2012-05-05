@@ -9,8 +9,15 @@ DudeGroup::DudeGroup()
 
 bool DudeGroup::requestEntry(Entity* supplicant)
 {
+
+  if (isInGroup(supplicant))
+    {
+      std::cout << "Dude already in group" << std::endl;
+      return false;
+    }
   if (rules.size() == 0)
     return true;
+
   std::cout << "Group entry denied" << std::endl;
   return false;
 }
@@ -47,4 +54,22 @@ void DudeGroup::removeFromGroup(Entity* trouble)
     {
       std::cout << "Dude not found in group" << std::endl;
     }
+}
+
+bool DudeGroup::isInGroup(Entity* dude)
+{
+  std::cout << "Searching for dude in group" << std::endl;
+  bool found = false;
+  std::vector<Entity*>::iterator it;
+  for (it = members.begin(); it != members.end(); ++it)
+    {
+      if (found)
+	break;
+      Entity* temp = *it;
+      if (temp == dude)
+	{
+	  found = true;
+	}
+    }
+  return found;
 }

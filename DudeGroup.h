@@ -22,6 +22,9 @@ class DudeGroup
   {   
   };
 
+
+  bool isInGroup(Entity* dude);
+
   std::vector<Entity*> members;
   std::list<e_ruleType> rules;
 };
