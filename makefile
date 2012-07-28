@@ -1,5 +1,5 @@
-OBJ = Diabolical.o Model.o World.o Entity.o Weather.o Renderer.o \
-	  ../../../tools/xorshift.o Creators.o Object.o Brain.o Structure.o \
+OBJ = Diabolical.o World.o Entity.o Weather.o Renderer.o \
+	  xorshift.o Creators.o Object.o Brain.o Structure.o \
 	  DudeGroup.o
 
 linux : CApp
@@ -51,3 +51,6 @@ Structure.o : Structure.h Structure.cpp Object.h Object.cpp
 
 DudeGroup.o : DudeGroup.h DudeGroup.cpp
 	g++ -c DudeGroup.cpp
+
+xorshift.o : xorshift.h xorshift.cpp
+	g++ -c xorshift.cpp

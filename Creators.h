@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "../../../tools/xorshift.h"
+#include "xorshift.h"
 
 #include "Map.h"
 #include "Object.h"

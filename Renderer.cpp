@@ -15,3 +15,8 @@ void Renderer::renderTest()
   //glEnd();
   glFlush();
 }
+
+void Renderer::renderTerrain(World* inWorld) 
+{
+	Map<double>* heightMap = inWorld->im_getWorldMap();
+}

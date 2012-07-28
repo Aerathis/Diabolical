@@ -3,11 +3,15 @@
 
 #include <GL/gl.h>
 
+#include "World.h"
+
 class Renderer
 {
 
  public:
   static void renderTest();
+
+	static void renderTerrain(World* inWorld);	
 
 };
 
